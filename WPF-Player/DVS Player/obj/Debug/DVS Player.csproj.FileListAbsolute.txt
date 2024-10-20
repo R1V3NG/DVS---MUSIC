@@ -1,0 +1,18 @@
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\bin\Debug\DVS Player.exe.config
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\bin\Debug\DVS Player.exe
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\bin\Debug\DVS Player.pdb
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\DVS Player.csproj.AssemblyReference.cache
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\MainWindow.g.cs
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\App.g.cs
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\DVS Player_MarkupCompile.cache
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\DVS Player_MarkupCompile.lref
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\App.baml
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\MainWindow.baml
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\DVS Player.g.resources
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\DVS_Player.Properties.Resources.resources
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\DVS Player.csproj.GenerateResource.cache
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\DVS Player.csproj.CoreCompileInputs.cache
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\DVS Player.exe
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\DVS Player.pdb
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\bin\Debug\AxInterop.WMPLib.dll
+C:\Users\Сергей\source\repos\DVS Player\DVS Player\obj\Debug\DVS Player.csproj.Up2Date
