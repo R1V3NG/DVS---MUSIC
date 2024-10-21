@@ -36,15 +36,15 @@
             <Setter Property="OverridesDefaultStyle" Value="true" />
             <Setter Property="Height" Value="20" />
             <Setter Property="Width" Value="20" />
-            <Setter Property="BorderThickness" Value="5" />
+            <Setter Property="BorderThickness" Value="7" />
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
                         <Grid>
                             <Border Name="AccentThumb"
-                                        Background="#1abc9c"
-                                        BorderBrush="#454545"
+                                        Background="#9370DB"
+                                        BorderBrush="#101040"
                                         BorderThickness="{TemplateBinding BorderThickness}"
                                         Width="20"
                                         Height="20"
@@ -85,17 +85,17 @@
                     <Track.DecreaseRepeatButton>
                         <RepeatButton Name="SliderLeft"
                                           Command="Slider.DecreaseLarge"
-                                          Foreground="#1abc9c"
+                                          Foreground="#9370DB"
                                           Style="{StaticResource SliderAccentButtonStyle}" />
                     </Track.DecreaseRepeatButton>
                     <Track.Thumb>
                         <Thumb Name="SliderThumb">
                             <Thumb.Style>
                                 <Style BasedOn="{StaticResource SliderThumbStyle}" TargetType="{x:Type Thumb}">
-                                    <Setter Property="Foreground" Value="#1abc9c" />
+                                    <Setter Property="Foreground" Value="#FF00" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource TemplatedParent}}" Value="true">
-                                            <Setter Property="BorderThickness" Value="3" />
+                                            <Setter Property="BorderThickness" Value="6" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Path=IsMouseCaptureWithin, RelativeSource={RelativeSource TemplatedParent}}" Value="true">
                                             <Setter Property="BorderThickness" Value="6" />
@@ -108,8 +108,8 @@
                     <Track.IncreaseRepeatButton>
                         <RepeatButton Name="SliderRight"
                                           Command="Slider.IncreaseLarge"
-                                          Foreground="#9B9B9B"
-                                          Style="{StaticResource SliderButtonStyle}" />
+                                          Foreground="#C0C0C0"
+                                          Style="{StaticResource SliderButtonStyle}" HorizontalAlignment="Right" Width="280" />
                     </Track.IncreaseRepeatButton>
                 </Track>
             </Grid>
