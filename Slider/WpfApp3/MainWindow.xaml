@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Slider Name="sSlider" HorizontalAlignment="Left" Margin="255,256,0,0" VerticalAlignment="Top" Width="120"/>
-        
+        <Slider Name="sSlider" HorizontalAlignment="Left" Margin="255,256,0,0" VerticalAlignment="Top" Width="300" IsMoveToPointEnabled="True"/>
+
     </Grid>
 </Window>
