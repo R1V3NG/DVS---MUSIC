@@ -1,0 +1,17 @@
+﻿<Window x:Class="MediaPlayerApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Media Player" Height="1080" Width="1920">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="61*"/>
+            <ColumnDefinition Width="382*"/>
+        </Grid.ColumnDefinitions>
+        <MediaElement x:Name="mediaElement" Width="350" Height="200" LoadedBehavior="Manual" Grid.ColumnSpan="2" Margin="46,68,47,67" />
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="1434,0,0,673" Grid.Column="1">
+            <Button Content="Открыть файл" Click="OpenFile_Click" Width="100" Height="100" />
+            <Button x:Name ="bPause" Content="Pause" Height="100" Width="100" Click="Button_Click"/>
+        </StackPanel>
+        <Slider Name ="sMusic" HorizontalAlignment="Left" Margin="14,957,0,0" Width="1900" ValueChanged="sMusic_ValueChanged" PreviewMouseDown="sMusic_PreviewMouseDown" PreviewMouseUp ="sMusic_PreviewMouseUp" Grid.ColumnSpan="6" VerticalAlignment="Top" IsMoveToPointEnabled="True"/>
+    </Grid>
+</Window>
