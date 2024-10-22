@@ -12,6 +12,8 @@
             <Button Content="Открыть файл" Click="OpenFile_Click" Width="100" Height="100" />
             <Button x:Name ="bPause" Content="Pause" Height="100" Width="100" Click="Button_Click"/>
         </StackPanel>
-        <Slider Name ="sMusic" HorizontalAlignment="Left" Margin="14,957,0,0" Width="1900" ValueChanged="sMusic_ValueChanged" PreviewMouseDown="sMusic_PreviewMouseDown" PreviewMouseUp ="sMusic_PreviewMouseUp" Grid.ColumnSpan="6" VerticalAlignment="Top" IsMoveToPointEnabled="True"/>
+        <Slider Name ="sMusic" HorizontalAlignment="Left" Margin="14,957,0,0" Width="1900" ValueChanged="sMusic_ValueChanged" Grid.ColumnSpan="6" VerticalAlignment="Top" IsMoveToPointEnabled="True" Thumb.DragStarted="sMusic_DragStarted" Thumb.DragCompleted="sMusic_DragCompleted"/>
+        <Label  Name ="lStart" Content="Label" HorizontalAlignment="Left" Margin="14,994,0,0" VerticalAlignment="Top"/>
+        <Label Name ="lEnd" Grid.Column="1" Content="Label" HorizontalAlignment="Right" Margin="1608,994,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
