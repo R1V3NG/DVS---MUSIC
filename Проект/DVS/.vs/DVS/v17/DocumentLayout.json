@@ -29,7 +29,11 @@
               "ToolTip": "C:\\Users\\\u0421\u0435\u0440\u0433\u0435\u0439\\Desktop\\DVS\\DVS\\MainWindow.xaml",
               "RelativeToolTip": "MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+<<<<<<< HEAD
               "WhenOpened": "2024-10-22T14:45:15.591Z"
+=======
+              "WhenOpened": "2024-10-23T09:46:13.542Z"
+>>>>>>> Damir
             },
             {
               "$type": "Document",
@@ -37,9 +41,15 @@
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\\u0421\u0435\u0440\u0433\u0435\u0439\\Desktop\\DVS\\DVS\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+<<<<<<< HEAD
               "ToolTip": "C:\\Users\\\u0421\u0435\u0440\u0433\u0435\u0439\\Desktop\\DVS\\DVS\\MainWindow.xaml.cs*",
               "RelativeToolTip": "MainWindow.xaml.cs*",
               "ViewState": "AQIAAHcAAAAAAAAAAAAAwHoAAAAAAAAA",
+=======
+              "ToolTip": "C:\\Users\\\u0421\u0435\u0440\u0433\u0435\u0439\\Desktop\\DVS\\DVS\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AQIAADAAAAAAAAAAAAAowGwAAAAMAAAA",
+>>>>>>> Damir
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-22T14:45:13.036Z",
               "EditorCaption": ""
