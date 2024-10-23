@@ -30,7 +30,7 @@ namespace MediaPlayerApp
                 mediaElement.Source = new System.Uri(openFileDialog.FileName);
                 mediaElement.LoadedBehavior = MediaState.Manual; // Устанавливаем поведение загрузки
                 timer.IsEnabled = true;
-                timer.Interval = TimeSpan.FromSeconds(1);
+                timer.Interval = TimeSpan.FromSeconds(0.005);
                 timer.Tick += Timer_Tick;
                 if (!isPaused)
                 {
