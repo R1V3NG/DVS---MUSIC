@@ -7,8 +7,13 @@
       "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+<<<<<<< HEAD
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\\u0421\u0435\u0440\u0433\u0435\u0439\\Desktop\\DVS\\DVS\\MainWindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:MainWindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+=======
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+>>>>>>> d5c330d5765c5f2015dd9c9ed9b505473a30367c
     }
   ],
   "DocumentGroupContainers": [
@@ -39,7 +44,11 @@
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\\u0421\u0435\u0440\u0433\u0435\u0439\\Desktop\\DVS\\DVS\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
+<<<<<<< HEAD
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAAAVAAAA",
+=======
+              "ViewState": "AQIAAEEAAAAAAAAAAAAwwBcAAAA7AAAA",
+>>>>>>> d5c330d5765c5f2015dd9c9ed9b505473a30367c
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-22T14:45:13.036Z",
               "EditorCaption": ""
