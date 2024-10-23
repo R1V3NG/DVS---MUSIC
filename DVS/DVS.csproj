@@ -94,5 +94,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="files.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
