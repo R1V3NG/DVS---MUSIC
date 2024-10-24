@@ -28,8 +28,7 @@ C:\Users\Сергей\Desktop\DVS\DVS\obj\Debug\DVS.exe
 C:\Users\Сергей\Desktop\DVS\DVS\obj\Debug\DVS.pdb
 C:\Users\Сергей\Desktop\DVS\DVS\obj\Debug\DVS_MarkupCompile.lref
 C:\Users\Сергей\Desktop\DVS\DVS\obj\Debug\App.baml
-<<<<<<< HEAD
-=======
 C:\Users\Привет\source\repos\DVS\obj\Debug\DVS_MarkupCompile.lref
 C:\Users\Привет\source\repos\DVS\obj\Debug\App.baml
->>>>>>> Damir
+C:\Users\Привет\source\repos\DVS\obj\Debug\DictionaryButton.baml
+C:\Users\Сергей\Desktop\DVS\DVS\obj\Debug\DictionaryButton.baml
