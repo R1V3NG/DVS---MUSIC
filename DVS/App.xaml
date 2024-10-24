@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:DVS"
              StartupUri="MainWindow.xaml">
+    
     <Application.Resources>
         <Style x:Key="SliderAccentButtonStyle" TargetType="{x:Type RepeatButton}">
             <Setter Property="OverridesDefaultStyle" Value="true" />

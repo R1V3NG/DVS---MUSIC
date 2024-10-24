@@ -4,21 +4,12 @@
         Title="DVS" Height="1080" Width="1920" WindowState="Maximized" WindowStartupLocation="CenterScreen" Background="#1E1E1E">
 
     <Window.Resources>
-        <Style x:Key="NoHighlightButtonStyle" TargetType="Button">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
-                            <Image x:Name ="ButtonImage"  Source="/play.png" Height="25" Width="25" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Focusable" Value="False" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="Foreground" Value="Black" />
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="DictionaryButton.xaml"/>
+                <!-- Подключаем словарь ресурсов -->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
     <Grid Background="Transparent">
@@ -38,25 +29,22 @@
         </StackPanel>
 
         <MediaElement x:Name="mediaElement" MediaElement.MediaEnded="MediaElement_MediaEnded" Width="100" Height="100" LoadedBehavior="Manual" Margin="645,483,-275,317"/>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="1434,0,0,673" Grid.Column="2"/>
 
         <Slider Name ="sMusic" HorizontalAlignment="Left" Margin="14,13,0,0" Width="1900" ValueChanged="sMusic_ValueChanged" Grid.ColumnSpan="3" VerticalAlignment="Top" IsMoveToPointEnabled="True" Thumb.DragStarted="sMusic_DragStarted" Thumb.DragCompleted="sMusic_DragCompleted" Grid.Row="1"/>
         <Label  Name ="lStart" Content="00:00:00" HorizontalAlignment="Left" Margin="14,50,0,0" VerticalAlignment="Top" FontSize="16" Foreground="White" Grid.Row="1"/>
         <Label Name ="lEnd" Grid.Column="2" Content="00:00:00" HorizontalAlignment="Right" Margin="0,50,33,0" VerticalAlignment="Top" Foreground="White" FontSize="16" Grid.Row="1"/>
-        <Button x:Name="OpenFile"  Click="OpenFile_Click" Width="155" Height="50"  FontSize="16" Grid.Column="1" Margin="1268,79,82,781" 
-                Focusable ="False" 
-                Background="#272727"
-                BorderBrush ="Transparent" >
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="10"/>
-                </Style>
-            </Button.Resources>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1">
+        <!-- Кнопка открытия файла со стилем -->
+        <Button x:Name="OpenFile" Style="{StaticResource RoundButtonStyle}" Click="OpenFile_Click"  FontSize="16" Grid.Column="1" Margin="1268,79,82,781" >
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1" Width="143" Height="50" >
                 <TextBlock VerticalAlignment="Center" Foreground="White">Открыть файл</TextBlock>
                 <Image Source="/files.png" Stretch="Uniform" Height="25" VerticalAlignment="Center" Margin="10,0,0,0" />
             </StackPanel>
         </Button>
-        <Button x:Name="bPause" Click="Button_Click"  Style="{StaticResource NoHighlightButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="114,51,0,0" Width="30" Height="30" Grid.Row="1"/>
+        <!-- Кнопка play|pause со стилем -->
+        <Button x:Name="bPause" Click="Button_Click"  Style="{StaticResource NoHighlightButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="104,46,0,0" Grid.Row="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
+                <Image x:Name="PlayImage" Source="/play.png" Stretch="Uniform" Height="35"/>
+            </StackPanel>
+        </Button>
     </Grid>
 </Window>
