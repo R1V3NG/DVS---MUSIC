@@ -30,7 +30,7 @@
 
         <MediaElement x:Name="mediaElement" MediaElement.MediaEnded="MediaElement_MediaEnded" Width="100" Height="100" LoadedBehavior="Manual" Margin="645,483,-275,317"/>
 
-        <Slider Name ="sMusic" HorizontalAlignment="Left" Margin="14,13,0,0" Width="1900" ValueChanged="sMusic_ValueChanged" Grid.ColumnSpan="3" VerticalAlignment="Top" IsMoveToPointEnabled="True" Thumb.DragStarted="sMusic_DragStarted" Thumb.DragCompleted="sMusic_DragCompleted" Grid.Row="1"/>
+        <Slider Name ="sMusic" HorizontalAlignment="Left" Margin="14,13,0,0" Width="1900" ValueChanged="sMusic_ValueChanged" Grid.ColumnSpan="3" VerticalAlignment="Top" IsMoveToPointEnabled="True" Thumb.DragStarted="sMusic_DragStarted" Thumb.DragCompleted="sMusic_DragCompleted" Grid.Row="1" Focusable="True"/>
         <Label  Name ="lStart" Content="00:00:00" HorizontalAlignment="Left" Margin="14,50,0,0" VerticalAlignment="Top" FontSize="16" Foreground="White" Grid.Row="1"/>
         <Label Name ="lEnd" Grid.Column="2" Content="00:00:00" HorizontalAlignment="Right" Margin="0,50,33,0" VerticalAlignment="Top" Foreground="White" FontSize="16" Grid.Row="1"/>
         <!-- Кнопка открытия файла со стилем -->

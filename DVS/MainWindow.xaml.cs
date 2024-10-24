@@ -36,7 +36,7 @@ namespace MediaPlayerApp
                 mediaElement.Source = new System.Uri(openFileDialog.FileName);
                 mediaElement.LoadedBehavior = MediaState.Manual; // Устанавливаем поведение загрузки
                 timer.IsEnabled = true;
-                timer.Interval = TimeSpan.FromMilliseconds(0.000001);
+                timer.Interval = TimeSpan.FromSeconds(0.005);
                 timer.Tick += Timer_Tick;
                 
                 if (!isPaused)
@@ -79,7 +79,7 @@ namespace MediaPlayerApp
             if (!isDragging && mediaElement.NaturalDuration.HasTimeSpan &&
                (((mediaElement.Position - TimeSpan.FromSeconds(args.NewValue)) > TimeSpan.FromSeconds(0.5)) || (TimeSpan.FromSeconds(args.NewValue) - mediaElement.Position > TimeSpan.FromSeconds(0.5))))
             {
-                mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
+                mediaElement.Position = TimeSpan.FromSeconds(args.NewValue);
             }
         }  
         private void Button_Click(object sender, RoutedEventArgs e)
