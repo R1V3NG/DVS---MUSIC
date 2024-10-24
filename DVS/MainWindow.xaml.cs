@@ -36,15 +36,17 @@ namespace MediaPlayerApp
                 mediaElement.Source = new System.Uri(openFileDialog.FileName);
                 mediaElement.LoadedBehavior = MediaState.Manual; // Устанавливаем поведение загрузки
                 timer.IsEnabled = true;
+<<<<<<< HEAD
                 timer.Interval = TimeSpan.FromSeconds(0.005);
                 //timer.Interval = TimeSpan.FromSeconds(0.0001);
+=======
+                timer.Interval = TimeSpan.FromMilliseconds(0.000001);
+>>>>>>> c3a67ab5a79c63373c8d1a44d8d77b81d935ee19
                 timer.Tick += Timer_Tick;
                 
                 if (!isPaused)
                 {
-                    var template = bPause.Template;
-                    var image = (Image)template.FindName("ButtonImage", bPause);
-                    image.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
+                    PlayImage.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
                     mediaElement.Play();
                 }
             }
@@ -54,7 +56,10 @@ namespace MediaPlayerApp
             if (mediaElement.NaturalDuration.HasTimeSpan)
             {
                 sMusic.Maximum = mediaElement.NaturalDuration.TimeSpan.TotalSeconds;
+<<<<<<< HEAD
                 
+=======
+>>>>>>> c3a67ab5a79c63373c8d1a44d8d77b81d935ee19
                 //Оставшиееся время до конца трека
                 TimeSpan remainingTime = mediaElement.NaturalDuration.TimeSpan - mediaElement.Position;
                 // Обновляем текстовое содержимое с оставшимся временем
@@ -64,7 +69,10 @@ namespace MediaPlayerApp
             {
                 sMusic.Value = mediaElement.Position.TotalSeconds;
             }
+<<<<<<< HEAD
 
+=======
+>>>>>>> c3a67ab5a79c63373c8d1a44d8d77b81d935ee19
 
             if (mediaElement != null)
             {
@@ -82,25 +90,28 @@ namespace MediaPlayerApp
         private void sMusic_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> args)
         {
             if (!isDragging && mediaElement.NaturalDuration.HasTimeSpan && 
+<<<<<<< HEAD
                (((mediaElement.Position - TimeSpan.FromSeconds(args.NewValue)) > TimeSpan.FromSeconds(0.5)) || (TimeSpan.FromSeconds(args.NewValue) - mediaElement.Position > TimeSpan.FromSeconds(0.5))))
+=======
+                ((mediaElement.Position - TimeSpan.FromSeconds(args.NewValue) > TimeSpan.FromSeconds(0.5)) 
+                || (TimeSpan.FromSeconds(args.NewValue) - mediaElement.Position > TimeSpan.FromSeconds(0.5))))
+>>>>>>> c3a67ab5a79c63373c8d1a44d8d77b81d935ee19
             {
                 mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
             }
         }  
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var template = bPause.Template;
-            var image = (Image)template.FindName("ButtonImage", bPause);;
             isPaused = !isPaused;
             if (isPaused && isOpen)
             {
                 mediaElement.Pause();
-                image.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
+                PlayImage.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
             }
             if (!isPaused && isOpen)
             {
                 mediaElement.Play();
-                image.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
+                PlayImage.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
             }
         }
         // ползунок перемещается
@@ -116,9 +127,7 @@ namespace MediaPlayerApp
         }
         private void MediaElement_MediaEnded(object sender, EventArgs e)
         {
-            var template = bPause.Template;
-            var image = (Image)template.FindName("ButtonImage", bPause);
-            image.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
+            PlayImage.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
             mediaElement.Stop();
             isPaused = true;
             sMusic.Value = 0;

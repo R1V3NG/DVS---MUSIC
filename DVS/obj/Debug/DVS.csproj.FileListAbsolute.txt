@@ -30,3 +30,4 @@ C:\Users\Сергей\Desktop\DVS\DVS\obj\Debug\DVS_MarkupCompile.lref
 C:\Users\Сергей\Desktop\DVS\DVS\obj\Debug\App.baml
 C:\Users\Привет\source\repos\DVS\obj\Debug\DVS_MarkupCompile.lref
 C:\Users\Привет\source\repos\DVS\obj\Debug\App.baml
+C:\Users\Привет\source\repos\DVS\obj\Debug\DictionaryButton.baml
