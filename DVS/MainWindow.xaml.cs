@@ -24,7 +24,6 @@ namespace MediaPlayerApp
             InitializeComponent();
 
             bPause.Focus();
-            sMusic.Focus();
         }
 
         private void OpenFile_Click(object sender, RoutedEventArgs e)
@@ -158,11 +157,21 @@ namespace MediaPlayerApp
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
+                isDragging = true;
                 var slider = (Slider)sender;
                 Point position = e.GetPosition(slider);
                 double d = 1.0d / slider.ActualWidth * position.X;
                 var p = slider.Maximum * d;
                 slider.Value = p;
+            }
+
+            if(e.LeftButton == MouseButtonState.Released)
+            {
+                if(isDragging)
+                {
+                    mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
+                    isDragging = false;
+                }
             }
         }
     }
