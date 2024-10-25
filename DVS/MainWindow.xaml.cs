@@ -15,9 +15,7 @@ namespace MediaPlayerApp
     {
         private bool isDragging = false; // если нет перемещения ползунка
         private bool isPaused = false; // если нет паузы
-        private bool isOpen; // если файл открыт
         private readonly DispatcherTimer timer = new DispatcherTimer();
-        private bool isSpaceDown = false;
 
         public MainWindow()
         {
@@ -36,11 +34,10 @@ namespace MediaPlayerApp
             };
             if (openFileDialog.ShowDialog() == true)
             {
-                isOpen = true;
                 mediaElement.Source = new System.Uri(openFileDialog.FileName);
                 mediaElement.LoadedBehavior = MediaState.Manual; // Устанавливаем поведение загрузки
                 timer.IsEnabled = true;
-                timer.Interval = TimeSpan.FromSeconds(0.000001);
+                timer.Interval = TimeSpan.FromMilliseconds(0.000001);
                 timer.Tick += Timer_Tick;
                 
                 if (!isPaused)
@@ -79,12 +76,12 @@ namespace MediaPlayerApp
         private void Pause()
         {
             isPaused = !isPaused;
-            if (isPaused && isOpen)
+            if (isPaused && mediaElement.HasAudio)
             {
                 mediaElement.Pause();
                 PlayImage.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
             }
-            if (!isPaused && isOpen)
+            if (!isPaused && mediaElement.HasAudio)
             {
                 mediaElement.Play();
                 PlayImage.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
@@ -95,8 +92,7 @@ namespace MediaPlayerApp
         private void sMusic_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> args)
         {
             if (!isDragging && mediaElement.NaturalDuration.HasTimeSpan && 
-                ((mediaElement.Position - TimeSpan.FromSeconds(args.NewValue) > TimeSpan.FromSeconds(0.5)) 
-                || (TimeSpan.FromSeconds(args.NewValue) - mediaElement.Position > TimeSpan.FromSeconds(0.5))))
+               (((mediaElement.Position - TimeSpan.FromSeconds(args.NewValue)) > TimeSpan.FromSeconds(0.5)) || (TimeSpan.FromSeconds(args.NewValue) - mediaElement.Position > TimeSpan.FromSeconds(0.5))))
             {
                 mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
             }
@@ -125,24 +121,25 @@ namespace MediaPlayerApp
 
         }
 
-        private void sMusic_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void bPause_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            
+            if (e.Key == Key.Left || e.Key == Key.Right)
+                mediaElement.Play();
         }
 
         private void bPause_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Left)
             {
+                mediaElement.Pause();
                 mediaElement.Position -= TimeSpan.FromSeconds(5);
             }
-
-            if(e.Key == Key.Right)
+            if (e.Key == Key.Right)
             {
+                mediaElement.Pause();
                 mediaElement.Position += TimeSpan.FromSeconds(5);
             }
         }
-
         private void sMusic_PreviewDragEnter(object sender, DragEventArgs e)
         {
 
@@ -157,21 +154,26 @@ namespace MediaPlayerApp
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
+                mediaElement.Pause();
                 isDragging = true;
-                var slider = (Slider)sender;
-                Point position = e.GetPosition(slider);
-                double d = 1.0d / slider.ActualWidth * position.X;
-                var p = slider.Maximum * d;
-                slider.Value = p;
+                /*var slider = (Slider)sender;*/
+                sMusic.CaptureMouse(); // захват мыши( исправил, тем самым баг)
+                Point position = e.GetPosition(sMusic); // тут есть баг, когда грузишь музыку, у нас в этот момент считывается мышка и ползунок перемещается
+                double d = 1.0d / sMusic.ActualWidth * position.X;
+                /*var p = sMusic.Maximum * d;*/
+                sMusic.Value = sMusic.Maximum * d;
             }
+        }
 
-            if(e.LeftButton == MouseButtonState.Released)
+        private void sMusic_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (isDragging)
             {
-                if(isDragging)
-                {
-                    mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
-                    isDragging = false;
-                }
+                sMusic.ReleaseMouseCapture();// после перетаскивания сразу отпускаю мышь
+                mediaElement.Play();
+                PlayImage.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
+                mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
+                isDragging = false;
             }
         }
     }
