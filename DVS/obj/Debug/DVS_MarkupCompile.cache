@@ -4,12 +4,20 @@
 winexe
 C#
 .cs
+<<<<<<< HEAD
 C:\Users\Сергей\Desktop\DVS\DVS\obj\Debug\
+=======
+C:\Users\Привет\source\repos\DVS-MUSIC\DVS---MUSIC\DVS\obj\Debug\
+>>>>>>> 65302915f6115ccce7aee5acd902f5cc8ec77a90
 DVS
 none
 false
 DEBUG;TRACE
+<<<<<<< HEAD
 C:\Users\Сергей\Desktop\DVS\DVS\App.xaml
+=======
+C:\Users\Привет\source\repos\DVS-MUSIC\DVS---MUSIC\DVS\App.xaml
+>>>>>>> 65302915f6115ccce7aee5acd902f5cc8ec77a90
 2-596473373
 
 6-793535042

@@ -39,6 +39,7 @@ namespace MediaPlayerApp
                 timer.IsEnabled = true;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 timer.Interval = TimeSpan.FromSeconds(0.005);
                 //timer.Interval = TimeSpan.FromSeconds(0.0001);
 =======
@@ -47,6 +48,9 @@ namespace MediaPlayerApp
 =======
                 timer.Interval = TimeSpan.FromMilliseconds(1); // теперь нет ошибки, насчёт ползунка и времени
 >>>>>>> 93d9352e01a8938b9c8f916a4536e09c207ae031
+=======
+                timer.Interval = TimeSpan.FromMilliseconds(1);
+>>>>>>> 65302915f6115ccce7aee5acd902f5cc8ec77a90
                 timer.Tick += Timer_Tick;
                 
                 if (!isPaused)
@@ -110,11 +114,15 @@ namespace MediaPlayerApp
         {
             if (!isDragging && mediaElement.NaturalDuration.HasTimeSpan && 
 <<<<<<< HEAD
+<<<<<<< HEAD
                (((mediaElement.Position - TimeSpan.FromSeconds(args.NewValue)) > TimeSpan.FromSeconds(0.5)) || (TimeSpan.FromSeconds(args.NewValue) - mediaElement.Position > TimeSpan.FromSeconds(0.5))))
 =======
                 ((mediaElement.Position - TimeSpan.FromSeconds(args.NewValue) > TimeSpan.FromSeconds(0.5)) 
                 || (TimeSpan.FromSeconds(args.NewValue) - mediaElement.Position > TimeSpan.FromSeconds(0.5))))
 >>>>>>> c3a67ab5a79c63373c8d1a44d8d77b81d935ee19
+=======
+               (((mediaElement.Position - TimeSpan.FromSeconds(args.NewValue)) > TimeSpan.FromSeconds(0.5)) || (TimeSpan.FromSeconds(args.NewValue) - mediaElement.Position > TimeSpan.FromSeconds(0.5))))
+>>>>>>> 65302915f6115ccce7aee5acd902f5cc8ec77a90
             {
                 mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
             }
@@ -145,7 +153,7 @@ namespace MediaPlayerApp
 
         private void bPause_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Left || e.Key == Key.Right)
+            if (!isPaused && (e.Key == Key.Left || e.Key == Key.Right))
                 mediaElement.Play();
         }
 
@@ -162,21 +170,16 @@ namespace MediaPlayerApp
                 mediaElement.Position += TimeSpan.FromSeconds(5);
             }
         }
-        private void sMusic_PreviewDragEnter(object sender, DragEventArgs e)
-        {
-
-        }
-
-        private void sMusic_DragEnter(object sender, DragEventArgs e)
-        {
-
-        }
-
+        // передвижение мышки по точке и захват мыши
         private void sMusic_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 mediaElement.Pause();
+                if (isPaused)
+                {
+                    PlayImage.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
+                }
                 isDragging = true;
                 /*var slider = (Slider)sender;*/
                 sMusic.CaptureMouse(); // захват мыши( исправил, тем самым баг)
@@ -185,17 +188,19 @@ namespace MediaPlayerApp
                 /*var p = sMusic.Maximum * d;*/
                 sMusic.Value = sMusic.Maximum * d;
             }
-
-            if(e.LeftButton == MouseButtonState.Released)
+        }
+        // Конец перемещения мыши
+        private void sMusic_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (isDragging)
             {
-                if (isDragging)
-                {
-                    sMusic.ReleaseMouseCapture(); // после перетаскивания сразу отпускаю мышь
+                sMusic.ReleaseMouseCapture();// после перетаскивания сразу отпускаю мышь
+                if (!isPaused) 
+                { 
                     mediaElement.Play();
-                    PlayImage.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
-                    mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
-                    isDragging = false;
                 }
+                mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
+                isDragging = false;
             }
         }
     }
