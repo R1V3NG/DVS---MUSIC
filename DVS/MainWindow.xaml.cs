@@ -60,9 +60,10 @@ namespace MediaPlayerApp
             if (!isDragging)
             {
                 sMusic.Value = mediaElement.Position.TotalSeconds;
+
             }
 
-            if (mediaElement != null)
+            if (mediaElement.HasAudio)
             {
                 lStart.Content = mediaElement.Position.ToString(@"hh\:mm\:ss");
             }
@@ -76,6 +77,7 @@ namespace MediaPlayerApp
         private void Pause()
         {
             isPaused = !isPaused;
+            mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
             if (isPaused && mediaElement.HasAudio)
             {
                 mediaElement.Pause();
@@ -120,13 +122,13 @@ namespace MediaPlayerApp
             sMusic.Value = 0;
 
         }
-
+        // условия для play с помощью стрелок
         private void bPause_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             if (!isPaused && (e.Key == Key.Left || e.Key == Key.Right))
                 mediaElement.Play();
         }
-
+        // пермещение ползунка по стрелкам
         private void bPause_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Left)
