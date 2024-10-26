@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\\u0421\u0435\u0440\u0433\u0435\u0439\\Desktop\\DVS\\DVS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|c:\\users\\\u0441\u0435\u0440\u0433\u0435\u0439\\desktop\\dvs\\dvs\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|c:\\users\\\u0441\u0435\u0440\u0433\u0435\u0439\\desktop\\dvs\\dvs\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u0421\u0435\u0440\u0433\u0435\u0439\\Desktop\\DVS\\DVS\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u0421\u0435\u0440\u0433\u0435\u0439\\Desktop\\DVS\\DVS\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,11 +18,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 301,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\\u0421\u0435\u0440\u0433\u0435\u0439\\Desktop\\DVS\\DVS\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
@@ -34,16 +34,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\\u0421\u0435\u0440\u0433\u0435\u0439\\Desktop\\DVS\\DVS\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\\u0421\u0435\u0440\u0433\u0435\u0439\\Desktop\\DVS\\DVS\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AQIAAJIAAAAAAAAAAADwv6kAAAAbAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAGsAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-22T14:45:13.036Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-22T14:45:13.036Z"
             }
           ]
         }

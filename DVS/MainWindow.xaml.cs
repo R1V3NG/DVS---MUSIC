@@ -76,6 +76,7 @@ namespace MediaPlayerApp
         private void Pause()
         {
             isPaused = !isPaused;
+            mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
             if (isPaused && mediaElement.HasAudio)
             {
                 mediaElement.Pause();
@@ -139,15 +140,6 @@ namespace MediaPlayerApp
                 mediaElement.Pause();
                 mediaElement.Position += TimeSpan.FromSeconds(5);
             }
-        }
-        private void sMusic_PreviewDragEnter(object sender, DragEventArgs e)
-        {
-
-        }
-
-        private void sMusic_DragEnter(object sender, DragEventArgs e)
-        {
-
         }
 
         private void sMusic_MouseMove(object sender, MouseEventArgs e)
