@@ -1,5 +1,7 @@
-﻿using Microsoft.Win32;
+﻿using DVS;
+using Microsoft.Win32;
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using TagLib;
 namespace MediaPlayerApp
 {
     public partial class MainWindow : Window
@@ -16,22 +19,53 @@ namespace MediaPlayerApp
         private bool isDragging = false; // если нет перемещения ползунка
         private bool isPaused = false; // если нет паузы
         private readonly DispatcherTimer timer = new DispatcherTimer();
-
+        public ObservableCollection<MusicFile> MusicQueue { get; set; }
         public MainWindow()
         {
             InitializeComponent();
+            MusicQueue = new ObservableCollection<MusicFile>();
+            DataContext = this;
 
+            //mediaElement.MediaEnded += MediaElementMediaEnded;
             bPause.Focus();
         }
-
-        private void OpenFile_Click(object sender, RoutedEventArgs e)
+        /*private void MediaElementMediaEnded(object sender, RoutedEventArgs e)
+        {
+            PlayNext();
+        }
+        private void PlayNext()
+        {
+            if (MusicQueue.Count > 0)
+            {
+                //MusicQueue.RemoveAt(0); // Удаляем текущий трек
+                if (MusicQueue.Count > 0)
+                {
+                    mediaElement.Source = new Uri(MusicQueue[0].FilePath);
+                    mediaElement.Play();
+                }
+            }
+        }*/
+        /*private void UpdateQueueDisplay()
+        {
+            MusicArea.Children.Clear();
+            foreach (var music in MusicQueue)
+            {
+                MusicArea.Children.Add(new System.Windows.Controls.TextBlock
+                {
+                    Text = music.Title,
+                    Margin = new Thickness(5),
+                    Foreground = new SolidColorBrush(Colors.White)
+            });
+            }
+        }*/
+            private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
             // При открытии файла, он сразу воспроизводится
             isPaused = false;
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Filter = "Media Files|*.mp3"
-            };
+        };
             if (openFileDialog.ShowDialog() == true)
             {
                 mediaElement.Source = new System.Uri(openFileDialog.FileName);
@@ -39,7 +73,23 @@ namespace MediaPlayerApp
                 timer.IsEnabled = true;
                 timer.Interval = TimeSpan.FromMilliseconds(1);
                 timer.Tick += Timer_Tick;
-                
+
+                var audioFile = TagLib.File.Create(openFileDialog.FileName);
+                trackTitle.Text = audioFile.Tag.Title;
+                trackMusician.Text = string.Join(", ", audioFile.Tag.Performers);
+                /*if (trackTitle.Text == "")
+                    trackTitle.Text = "Нет названия";
+                if (trackMusician.Text == "")
+                    trackMusician.Text = "Нет исполнителя";*/
+
+                /*var musicFile = new MusicFile
+                {
+                    Title = trackTitle.Text,
+                    FilePath = openFileDialog.FileName
+                };
+                MusicQueue.Add(musicFile);
+                UpdateQueueDisplay();*/
+
                 if (!isPaused)
                 {
                     PlayImage.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
@@ -153,11 +203,9 @@ namespace MediaPlayerApp
                     PlayImage.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
                 }
                 isDragging = true;
-                /*var slider = (Slider)sender;*/
                 sMusic.CaptureMouse(); // захват мыши( исправил, тем самым баг)
                 Point position = e.GetPosition(sMusic); // тут есть баг, когда грузишь музыку, у нас в этот момент считывается мышка и ползунок перемещается
                 double d = 1.0d / sMusic.ActualWidth * position.X;
-                /*var p = sMusic.Maximum * d;*/
                 sMusic.Value = sMusic.Maximum * d;
             }
         }

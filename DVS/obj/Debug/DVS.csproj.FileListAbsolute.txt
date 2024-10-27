@@ -49,3 +49,7 @@ C:\Users\Привет\source\repos\DVS-MUSIC\DVS---MUSIC\DVS\obj\Debug\DVS.cspro
 C:\Users\Привет\source\repos\DVS-MUSIC\DVS---MUSIC\DVS\obj\Debug\DVS.csproj.CoreCompileInputs.cache
 C:\Users\Привет\source\repos\DVS-MUSIC\DVS---MUSIC\DVS\obj\Debug\DVS.exe
 C:\Users\Привет\source\repos\DVS-MUSIC\DVS---MUSIC\DVS\obj\Debug\DVS.pdb
+C:\Users\Привет\source\repos\DVS\bin\Debug\TagLibSharp.dll
+C:\Users\Привет\source\repos\DVS\bin\Debug\TagLibSharp.pdb
+C:\Users\Привет\source\repos\DVS\bin\Debug\TagLibSharp.xml
+C:\Users\Привет\source\repos\DVS\obj\Debug\DVS.csproj.Up2Date

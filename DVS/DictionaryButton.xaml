@@ -37,7 +37,7 @@
         <Setter Property="Height" Value="50"/>
         <!-- Высота кнопки -->
     </Style>
-    <!-- Стиль для кнопки play|pause -->
+    <!-- Стиль для кнопки play|pause|forward|back -->
     <Style x:Key="NoHighlightButtonStyle" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
@@ -45,7 +45,7 @@
                     <Border x:Name="border" Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}" 
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="10">
+                            CornerRadius="7">
                         <Grid>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
@@ -56,7 +56,7 @@
                             <!-- Цвет при наведении -->
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#303030"/>
+                            <Setter TargetName="border" Property="Background" Value="#393939"/>
                             <!-- Цвет при нажатии -->
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -67,9 +67,5 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Foreground" Value="Black" />
-        <Setter Property="Width" Value="40"/>
-        <!-- Ширина кнопки -->
-        <Setter Property="Height" Value="40"/>
-        <!-- Высота кнопки -->
     </Style>
 </ResourceDictionary>
