@@ -29,32 +29,32 @@
         <StackPanel x:Name="MusicArea" Background="#1E1E1E" Grid.Row="0" Grid.Column="1"/>
         <!--Правая верхняя область, кроме открытия файла-->
 
-        <MediaElement x:Name="mediaElement" MediaElement.MediaEnded="MediaElement_MediaEnded" Width="0" Height="0" LoadedBehavior="Manual" Margin="275,488,1175,322"/>
+        <MediaElement x:Name="mediaElement" MediaElement.MediaEnded="MediaElement_MediaEnded" Width="0" Height="0" LoadedBehavior="Manual" Margin="275,488,1175,322" />
 
         <Slider Name ="sMusic" HorizontalAlignment="Left" Margin="14,13,0,0" Width="1900" ValueChanged="sMusic_ValueChanged" Grid.ColumnSpan="2" VerticalAlignment="Top" IsMoveToPointEnabled="True" Thumb.DragStarted="sMusic_DragStarted" Thumb.DragCompleted="sMusic_DragCompleted" Grid.Row="1" Focusable="False" MouseMove="sMusic_MouseMove" PreviewMouseUp="sMusic_PreviewMouseUp" />
         <Label  Name ="lStart" Content="00:00:00" HorizontalAlignment="Left" Margin="14,50,0,0" VerticalAlignment="Top" FontSize="16" Foreground="White" Grid.Row="1"/>
         <Label Name ="lEnd" Grid.Column="1" Content="00:00:00" HorizontalAlignment="Right" Margin="0,50,33,0" VerticalAlignment="Top" Foreground="White" FontSize="16" Grid.Row="1"/>
         <!-- Кнопка открытия файла со стилем -->
-        <Button x:Name="OpenFile" Style="{StaticResource RoundButtonStyle}" Width="165" Click="OpenFile_Click"  FontSize="16" Grid.Column="1" Margin="1295,100,100,700" >
+        <Button x:Name="OpenFile" Style="{StaticResource RoundButtonStyle}" Width="165" Click="OpenFolder_Click"  FontSize="16" Grid.Column="1" Margin="1295,100,100,700" >
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Width="150" >
                 <TextBlock VerticalAlignment="Center" Foreground="White">Открыть папку</TextBlock>
                 <Image Source="/files.png" Stretch="Uniform" Height="25" VerticalAlignment="Center" Margin="10,0,0,0" />
             </StackPanel>
         </Button>
         <!-- Кнопка play|pause со стилем -->
-        <Button x:Name="bPause" Click="Button_Click"  Style="{StaticResource NoHighlightButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="145,46,0,0" Grid.Row="1" PreviewKeyDown="bPause_PreviewKeyDown" PreviewKeyUp="bPause_PreviewKeyUp">
+        <Button x:Name="bPause" Click="Pause_Click"  Style="{StaticResource NoHighlightButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="145,46,0,0" Grid.Row="1" PreviewKeyDown="bPause_PreviewKeyDown" PreviewKeyUp="bPause_PreviewKeyUp">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Height="38" Width="38" >
                 <Image x:Name="PlayImage" Source="/play.png" Stretch="Uniform" Height="34" Width="38"/>
             </StackPanel>
         </Button>
 
-        <Button x:Name="bBack" Style="{StaticResource NoHighlightButtonStyle}" Focusable="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,51,0,0" Grid.Row="1" Height="30" Width="30">
+        <Button x:Name="bBack" Click ="BackButton_Click" Style="{StaticResource NoHighlightButtonStyle}" Focusable="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,51,0,0" Grid.Row="1" Height="30" Width="30">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
                 <Image x:Name="BackImage" Source="/back.png" Stretch="Uniform" Height="25"/>
             </StackPanel>
         </Button>
 
-        <Button x:Name="bForward" Style="{StaticResource NoHighlightButtonStyle}" Focusable="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="195,51,0,0" Grid.Row="1" Height="30" Width="30">
+        <Button x:Name="bNext" Click="NextButton_Click" Style="{StaticResource NoHighlightButtonStyle}" Focusable="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="195,51,0,0" Grid.Row="1" Height="30" Width="30">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" >
                 <Image x:Name="ForwardImage" Source="/forward.png" Height="25"/>
             </StackPanel>
