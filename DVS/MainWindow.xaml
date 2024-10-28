@@ -61,8 +61,8 @@
         </Button>
 
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Margin="17,51,0,0" Grid.Column="1" Height="56">
-            <TextBlock x:Name="trackTitle" Text="" FontFamily="Nunito" FontSize="20" Background="Transparent" Foreground="White" Height="30" Width="600"/>
-            <TextBlock x:Name="trackMusician" Text="" FontFamily="Nunito" FontSize="18" Background="Transparent" Foreground="White" Height="26" Width="600"/>
+            <TextBlock x:Name="trackTitle" Text="" FontFamily="Nunito" FontSize="18" Background="Transparent" Foreground="White" Height="30" Width="700"/>
+            <TextBlock x:Name="trackMusician" Text="" FontFamily="Nunito" FontSize="16" Background="Transparent" Foreground="White" Height="26" Width="700"/>
         </StackPanel>
     </Grid>
 </Window>

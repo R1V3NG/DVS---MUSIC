@@ -115,7 +115,11 @@ namespace MediaPlayerApp
                 PlayImage.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
                 mediaElement.Stop();
             }
+            if (mediaElement.HasAudio)
             GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath);
+            
+
+            //GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath);
         }
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
