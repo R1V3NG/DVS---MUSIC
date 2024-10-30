@@ -31,7 +31,13 @@ namespace MediaPlayerApp
             MusicQueue = new ObservableCollection<MusicFile>();
             bPause.Focus();
         }
-        private void OpenFolder_Click(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Установка окна в полноэкранный режим
+            this.WindowState = WindowState.Maximized; // Максимизируем окно
+            this.Topmost = true; // Делаем окно поверх других
+        }
+            private void OpenFolder_Click(object sender, RoutedEventArgs e)
         {
             // Открываем диалог для выбора папки
             MusicQueue.Clear(); // удаляем все предыдущие элементы -> если отключить, то мы будем добавлять музыку в очередь, причём она может дублироваться
@@ -272,6 +278,7 @@ namespace MediaPlayerApp
                 isDragging = false;
             }
         }
+
         
     }
 }
