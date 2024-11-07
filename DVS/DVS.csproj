@@ -59,7 +59,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Registration.xaml.cs">
+      <DependentUpon>Registration.xaml</DependentUpon>
+    </Compile>
     <Page Include="DictionaryButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DictionaryCheckBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -75,6 +82,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Registration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MusicFile.cs" />
@@ -114,13 +125,19 @@
     <Resource Include="back.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="image.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="forward.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="profile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="hidden.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="show.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

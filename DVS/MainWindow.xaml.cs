@@ -279,6 +279,11 @@ namespace MediaPlayerApp
             }
         }
 
-        
+        private void RegistrationButton_Click(object sender, RoutedEventArgs e)
+        {
+            RegistrationWindow registrationWindow = new RegistrationWindow();
+            registrationWindow.Owner = this; // Устанавливаем основное окно как владельца
+            registrationWindow.ShowDialog();
+        }
     }
 }

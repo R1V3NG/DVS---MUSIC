@@ -64,5 +64,10 @@
             <TextBlock x:Name="trackTitle" Text="" FontFamily="Nunito" FontSize="18" Background="Transparent" Foreground="White" Height="30" Width="700"/>
             <TextBlock x:Name="trackMusician" Text="" FontFamily="Nunito" FontSize="16" Background="Transparent" Foreground="White" Height="26" Width="700"/>
         </StackPanel>
+        <Button x:Name="bProfile" Click="RegistrationButton_Click" Style="{StaticResource NoHighlightButtonStyle}" Focusable="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="280,780,0,0" Height="60" Width="60">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
+                <Image x:Name="ProfileImage" Source="/profile.png" Height="50"/>
+            </StackPanel>
+        </Button>
     </Grid>
 </Window>
