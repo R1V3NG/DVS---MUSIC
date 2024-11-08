@@ -104,6 +104,7 @@ namespace DVS
             {
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.Show();
+                Close();
             }
             else
             {

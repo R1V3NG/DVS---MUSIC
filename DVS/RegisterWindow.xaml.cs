@@ -36,6 +36,7 @@ namespace DVS
                     if(CheckLogin())
                     {
                         DbConnect();
+                        Close();
                     }
                     else
                     {
@@ -115,5 +116,7 @@ namespace DVS
                 command.ExecuteNonQuery();
             }
         }
+
+
     }
 }
