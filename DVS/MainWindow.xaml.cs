@@ -16,11 +16,12 @@ using System.Windows.Threading;
 using TagLib;
 using System.Windows.Forms;
 using System.Xml;
+using Microsoft.Data.Sqlite;
 namespace MediaPlayerApp
 {
     public partial class MainWindow : Window
     {
-        private int currentTrackIndex; // индекс песни в очереди
+        private int currentTrackIndex = -1; // индекс песни в очереди
         private bool isDragging = false; // если нет перемещения ползунка
         private bool isPaused = false; // если нет паузы
         private readonly DispatcherTimer timer = new DispatcherTimer();
@@ -31,44 +32,49 @@ namespace MediaPlayerApp
             MusicQueue = new ObservableCollection<MusicFile>();
             bPause.Focus();
         }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Установка окна в полноэкранный режим
-            this.WindowState = WindowState.Maximized; // Максимизируем окно
-            this.Topmost = true; // Делаем окно поверх других
-        }
-            private void OpenFolder_Click(object sender, RoutedEventArgs e)
+        private void OpenFolder_Click(object sender, RoutedEventArgs e)
         {
             // Открываем диалог для выбора папки
-            MusicQueue.Clear(); // удаляем все предыдущие элементы -> если отключить, то мы будем добавлять музыку в очередь, причём она может дублироваться
-            var folderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            //MusicQueue.Clear(); // удаляем все предыдущие элементы -> если отключить, то мы будем добавлять музыку в очередь, причём она может дублироваться
+            var folderDialog = new FolderBrowserDialog();
             if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 timer.IsEnabled = true;
                 timer.Interval = TimeSpan.FromMilliseconds(1);
                 timer.Tick += Timer_Tick;
-                
+
                 string[] audioFiles = Directory.GetFiles(folderDialog.SelectedPath, "*.*")
                     .Where(s => s.EndsWith(".mp3")).ToArray();
-                MusicArea.Children.Clear();
+                //MusicArea.Children.Clear();
                 foreach (var file in audioFiles)
                 {
+                    currentTrackIndex++;
                     GetAndSetInfoMusic(file);
                     MusicFile music = new MusicFile
                     {
                         Title = Path.GetFileNameWithoutExtension(file), // Получаем название файла без расширения
-                        FilePath = file // Полный путь к файлу
+                        FilePath = file, // Полный путь к файлу
+                        FileDirectory = Path.GetDirectoryName(file)
                     };
                     MusicQueue.Add(music);
-                    TextBlock textBlock = new TextBlock
+                    System.Windows.Controls.Button button = new System.Windows.Controls.Button
                     {
-                        Text = Path.GetFileNameWithoutExtension(file),
-                        Margin = new Thickness(5),
+                        Content = Path.GetFileNameWithoutExtension(file),
+                        Width = 1450,
+                        Height = 50,
+                        HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                        VerticalAlignment = System.Windows.VerticalAlignment.Top,
+                        HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
+                        Margin = new Thickness(50, 5, 50, 10),
                         Foreground = new SolidColorBrush(Colors.White),
                         FontFamily = new FontFamily("Nunito"),
-                        FontSize = 16
-                };
-                    MusicArea.Children.Add(textBlock);
+                        FontSize = 18,
+                        Style = (Style)FindResource("RoundButtonStyle"),
+                        Tag = currentTrackIndex
+                    };
+                    button.Click += MusicMouse;
+                    MusicArea.Children.Add(button);
+                    //DbConnect(music.FileDirectory, music.Title);
                 }
                 // Начинаем воспроизведение первой песни, если есть файлы
                 if (MusicQueue.Count > 0)
@@ -83,9 +89,21 @@ namespace MediaPlayerApp
                 }
             }
         }
+        // Нажатие на кнопку песни
+        private void MusicMouse(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.Button clickedButton = sender as System.Windows.Controls.Button;
+            int trackIndex = (int)clickedButton.Tag;
+            currentTrackIndex = trackIndex;
+            if (clickedButton != null)
+            { 
+                GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath); // Воспроизводим музыку
+            }
+        }
         private void Pause()
         {
-            isPaused = !isPaused;
+            if (mediaElement.HasAudio)
+                isPaused = !isPaused;
             mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
             if (isPaused && mediaElement.HasAudio)
             {
@@ -112,20 +130,21 @@ namespace MediaPlayerApp
         }
         private void NextTrack()
         {
-            currentTrackIndex++;
-            // Проверяем, не вышли ли мы за пределы списка
-            if (currentTrackIndex >= MusicQueue.Count)
+            if (MusicQueue.Count > 0)
             {
-                currentTrackIndex = 0;
-                isPaused = true; // т.к очередь закончилась, ставим на паузу
-                PlayImage.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
-                mediaElement.Stop();
+                currentTrackIndex++;
+                // Проверяем, не вышли ли мы за пределы списка
+                if (currentTrackIndex >= MusicQueue.Count && MusicQueue.Count > 0)
+                {
+                    currentTrackIndex = 0;
+                    isPaused = true; // т.к очередь закончилась, ставим на паузу
+                    PlayImage.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
+                    mediaElement.Stop();
+                }
+                if (mediaElement.HasAudio)
+                    GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath);
             }
-            if (mediaElement.HasAudio)
-            GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath);
-            
 
-            //GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath);
         }
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
@@ -140,7 +159,7 @@ namespace MediaPlayerApp
             }
         }
         // Можно будет сделать и с файлом отдельно
-        private void OpenFile_Click(object sender, RoutedEventArgs e)
+        private void OpenFolder1_Click(object sender, RoutedEventArgs e)
         {
             // При открытии файла, он сразу воспроизводится
             isPaused = false;
@@ -247,6 +266,15 @@ namespace MediaPlayerApp
                 mediaElement.Position += TimeSpan.FromSeconds(sMusic.Maximum / 100d);
             }
         }
+        private void Up_Click(object sender, RoutedEventArgs e)
+        {
+            scroll.LineUp();
+        }
+
+        private void Down_Click(object sender, RoutedEventArgs e)
+        {
+            scroll.LineDown();
+        }
         // передвижение мышки по точке и захват мыши
         private void sMusic_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -278,12 +306,45 @@ namespace MediaPlayerApp
                 isDragging = false;
             }
         }
-
+        // пока не знаем, что будет
         private void RegistrationButton_Click(object sender, RoutedEventArgs e)
         {
-            RegistrationWindow registrationWindow = new RegistrationWindow();
-            registrationWindow.Owner = this; // Устанавливаем основное окно как владельца
-            registrationWindow.ShowDialog();
+            LoginWindow.isCorrect = false;
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Owner = this; // Устанавливаем основное окно как владельца
+            loginWindow.ShowDialog();
+            if(LoginWindow.isCorrect)
+            {
+                Close();
+            }
         }
+
+        /*void DbConnect(string path, string name)
+        {
+            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand();
+
+                command.Connection = connection;
+                command.Parameters.AddWithValue("@name", name);
+                command.Parameters.AddWithValue("@path", path);
+
+
+                //Добавление директории
+                command.CommandText = "INSERT INTO directories (directory) SELECT @path WHERE NOT EXISTS (SELECT directory FROM directories WHERE directory = @path)";
+                command.ExecuteNonQuery();
+
+                //Добавление песни
+                command.CommandText = "INSERT INTO music_names (name) SELECT @name WHERE NOT EXISTS (SELECT name FROM music_names WHERE name = @name)";
+                command.ExecuteNonQuery();
+
+                //Добавление записей в костыльную таблицу
+                command.CommandText = "INSERT INTO music (name_id, directory_id) SELECT (SELECT id FROM music_names WHERE name = @name), (SELECT id FROM directories WHERE directory = @path) WHERE NOT EXISTS (SELECT music_names.id, directories.id FROM music JOIN music_names ON music.name_id = music_names.id JOIN directories ON music.directory_id = directories.id WHERE music_names.id = @name AND directories.id = @path)";
+                command.ExecuteNonQuery();
+            }
+        }*/
     }
 }
