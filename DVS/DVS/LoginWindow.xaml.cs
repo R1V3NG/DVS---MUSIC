@@ -95,7 +95,7 @@ namespace DVS
             {
                 if (user.login == tLogin.Text && user.password == tPassword.Password)
                 {
-                    activeUser = user.login;
+                    MainWindow.activeUser = user.login;
                     isCorrect = true;
                 }
             }

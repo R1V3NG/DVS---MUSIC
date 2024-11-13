@@ -17,82 +17,93 @@ using TagLib;
 using System.Windows.Forms;
 using System.Xml;
 using Microsoft.Data.Sqlite;
-using TagLib.Mpeg;
+using System.Windows.Shapes;
+using System.Xml.Linq;
+using System.Collections.Generic;
 namespace MediaPlayerApp
 {
     public partial class MainWindow : Window
     {
         private int currentTrackIndex = -1; // индекс песни в очереди
-        private int MaxTrackindex=0;
+        private int MaxTrackIndex = 0;
         private bool isDragging = false; // если нет перемещения ползунка
         private bool isPaused = true; // если нет паузы
         private readonly DispatcherTimer timer = new DispatcherTimer();
+        public static string activeUser;
+        List<string> directories = new List<string>();
+
         public ObservableCollection<MusicFile> MusicQueue { get; set; } // список очереди
         public MainWindow()
         {
             InitializeComponent();
-            MusicQueue = new ObservableCollection<MusicFile>();
+            //MusicQueue = new ObservableCollection<MusicFile>();
             bPause.Focus();
         }
         private void OpenFolder_Click(object sender, RoutedEventArgs e)
         {
-            MaxTrackindex = MusicQueue.Count()-1;
             // Открываем диалог для выбора папки
             //MusicQueue.Clear(); // удаляем все предыдущие элементы -> если отключить, то мы будем добавлять музыку в очередь, причём она может дублироваться
             var folderDialog = new FolderBrowserDialog();
             if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                timer.IsEnabled = true;
-                timer.Interval = TimeSpan.FromMilliseconds(1);
-                timer.Tick += Timer_Tick;
-
-                string[] audioFiles = Directory.GetFiles(folderDialog.SelectedPath, "*.*")
-                    .Where(s => s.EndsWith(".mp3")).ToArray();
-                //MusicArea.Children.Clear();
-                foreach (var file in audioFiles)
-                {
-                    MaxTrackindex++;
-                    GetAndSetInfoMusic(file);
-                    MusicFile music = new MusicFile
-                    {
-                        Title = Path.GetFileNameWithoutExtension(file), // Получаем название файла без расширения
-                        FilePath = file, // Полный путь к файлу
-                        FileDirectory = Path.GetDirectoryName(file)
-                    };
-                    MusicQueue.Add(music);
-                    System.Windows.Controls.Button button = new System.Windows.Controls.Button
-                    {
-                        Content = GetAndSetInfoMusic(file),
-                        Width = 1450,
-                        Height = 50,
-                        HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                        VerticalAlignment = System.Windows.VerticalAlignment.Top,
-                        HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
-                        Margin = new Thickness(50, 5, 50, 10),
-                        Foreground = new SolidColorBrush(Colors.White),
-                        FontFamily = new FontFamily("Nunito"),
-                        FontSize = 18,
-                        Style = (Style)FindResource("RoundButtonStyle"),
-                        Tag = MaxTrackindex
-                    };
-                    button.Click += MusicMouse;
-                    MusicArea.Children.Add(button);
-                    //DbConnect(music.FileDirectory, music.Title);
-                }
-                // Начинаем воспроизведение первой песни, если есть файлы
-                if (MusicQueue.Count != 0 && currentTrackIndex ==-1)
-                {
-                    currentTrackIndex = 0; // Устанавливаем индекс на первый трек
-                    GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath);
-                }
+                OpenFolders(folderDialog.SelectedPath);
             }
         }
+
+        void OpenFolders(string path)
+        {
+            MaxTrackIndex = MusicQueue.Count() - 1;
+            timer.IsEnabled = true;
+            timer.Interval = TimeSpan.FromMilliseconds(1);
+            timer.Tick += Timer_Tick;
+
+            string[] audioFiles = Directory.GetFiles(path, "*.*")
+                .Where(s => s.EndsWith(".mp3")).ToArray();
+            //MusicArea.Children.Clear();
+            foreach (var file in audioFiles)
+            {
+                MaxTrackIndex++;
+                GetAndSetInfoMusic(file);
+                MusicFile music = new MusicFile
+                {
+                    Title = System.IO.Path.GetFileNameWithoutExtension(file), // Получаем название файла без расширения
+                    FilePath = file, // Полный путь к файлу
+                    FileDirectory = System.IO.Path.GetDirectoryName(file)
+                };
+                MusicQueue.Add(music);
+                System.Windows.Controls.Button button = new System.Windows.Controls.Button
+                {
+                    Content = GetAndSetInfoMusic(file),
+                    Width = 1450,
+                    Height = 50,
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                    VerticalAlignment = System.Windows.VerticalAlignment.Top,
+                    HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
+                    Margin = new Thickness(50, 5, 50, 10),
+                    Foreground = new SolidColorBrush(Colors.White),
+                    FontFamily = new FontFamily("Nunito"),
+                    FontSize = 18,
+                    Style = (Style)FindResource("RoundButtonStyle"),
+                    Tag = MaxTrackIndex
+                };
+                button.Click += MusicMouse;
+                MusicArea.Children.Add(button);
+                DbConnect(music.FileDirectory, music.Title, activeUser);
+            }
+            // Начинаем воспроизведение первой песни, если есть файлы
+            if (MusicQueue.Count > 0 && currentTrackIndex == -1)
+            {
+                currentTrackIndex = 0; // Устанавливаем индекс на первый трек
+                GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath);
+            }
+        }
+
         // Нажатие на кнопку песни
         private void MusicMouse(object sender, RoutedEventArgs e)
         {
             System.Windows.Controls.Button clickedButton = sender as System.Windows.Controls.Button;
             int trackIndex = (int)clickedButton.Tag;
-            currentTrackIndex = trackIndex; 
+            currentTrackIndex = trackIndex;
             if (clickedButton != null)
             {
                 isPaused = false;
@@ -119,10 +130,9 @@ namespace MediaPlayerApp
         }
         private void Pause_Click(object sender, RoutedEventArgs e)
         {
-            //System.Windows.Forms.MessageBox.Show(Convert.ToString(isPaused), "P", MessageBoxButtons.OK);
             Pause();
         }
-        // Метод который выводит информацию, задаёт путь следующей музыки в очереди и вовзращает название трека
+        // Метод который выводит информацию и задаёт путь следующей музыки в очереди
         private string GetAndSetInfoMusic(string file)
         {
             var audioFile = TagLib.File.Create(file);
@@ -173,14 +183,18 @@ namespace MediaPlayerApp
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
             {
                 Filter = "Media Files|*.mp3"
-        };
+            };
             if (openFileDialog.ShowDialog() == true)
             {
                 mediaElement.Source = new System.Uri(openFileDialog.FileName);
                 mediaElement.LoadedBehavior = MediaState.Manual; // Устанавливаем поведение загрузки
-                timer.IsEnabled = true;
-                timer.Interval = TimeSpan.FromMilliseconds(1);
+                if (!timer.IsEnabled)
+                {
+                    timer.IsEnabled = true;
+                    timer.Interval = TimeSpan.FromMilliseconds(1);
+                }
                 timer.Tick += Timer_Tick;
+                
 
                 var audioFile = TagLib.File.Create(openFileDialog.FileName);
                 trackTitle.Text = audioFile.Tag.Title ?? System.IO.Path.GetFileNameWithoutExtension(openFileDialog.FileName);
@@ -212,7 +226,7 @@ namespace MediaPlayerApp
                 sMusic.Value = mediaElement.Position.TotalSeconds;
             }
 
-            if (mediaElement.Source != null)
+            if (mediaElement.HasAudio)
             {
                 lStart.Content = mediaElement.Position.ToString(@"hh\:mm\:ss");
             }
@@ -269,15 +283,6 @@ namespace MediaPlayerApp
                 mediaElement.Position += TimeSpan.FromSeconds(sMusic.Maximum / 100d);
             }
         }
-        private void Up_Click(object sender, RoutedEventArgs e)
-        {
-            scroll.LineUp();
-        }
-
-        private void Down_Click(object sender, RoutedEventArgs e)
-        {
-            scroll.LineDown();
-        }
         // передвижение мышки по точке и захват мыши
         private void sMusic_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -322,7 +327,7 @@ namespace MediaPlayerApp
             }
         }
 
-        /*void DbConnect(string path, string name)
+        void DbConnect(string path, string name, string user)
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
             using (var connection = new SqliteConnection(connectionString))
@@ -334,6 +339,7 @@ namespace MediaPlayerApp
                 command.Connection = connection;
                 command.Parameters.AddWithValue("@name", name);
                 command.Parameters.AddWithValue("@path", path);
+                command.Parameters.AddWithValue("@user", user);
 
 
                 //Добавление директории
@@ -345,9 +351,49 @@ namespace MediaPlayerApp
                 command.ExecuteNonQuery();
 
                 //Добавление записей в костыльную таблицу
-                command.CommandText = "INSERT INTO music (name_id, directory_id) SELECT (SELECT id FROM music_names WHERE name = @name), (SELECT id FROM directories WHERE directory = @path) WHERE NOT EXISTS (SELECT music_names.id, directories.id FROM music JOIN music_names ON music.name_id = music_names.id JOIN directories ON music.directory_id = directories.id WHERE music_names.id = @name AND directories.id = @path)";
+                command.CommandText = "INSERT INTO music (name_id, directory_id) SELECT (SELECT id FROM music_names WHERE name = @name), (SELECT id FROM directories WHERE directory = @path) WHERE NOT EXISTS (SELECT music_names.id, directories.id FROM music JOIN music_names ON music.name_id = music_names.id JOIN directories ON music.directory_id = directories.id WHERE music_names.name = @name AND directories.directory = @path)";
+                command.ExecuteNonQuery();
+
+                command.CommandText = "INSERT INTO `directories-users` (directory_id, user_id) SELECT (SELECT id FROM directories WHERE directory = @path), (SELECT id FROM users WHERE login = @user) WHERE NOT EXISTS (SELECT directories.id, users.id FROM `directories-users` JOIN directories ON `directories-users`.directory_id = directories.id JOIN users ON `directories-users`.user_id = users.id WHERE directories.directory = @path AND users.login = @user)";
                 command.ExecuteNonQuery();
             }
-        }*/
+        }
+
+        private void Window_Initialized(object sender, EventArgs e)
+        {
+            DbInit();
+            MusicQueue = new ObservableCollection<MusicFile>();
+            if (directories.Count > 0 && directories != null)
+            {
+
+                foreach (var directory in directories)
+                {
+                    OpenFolders(directory);
+                }
+            }
+        }
+
+        void DbInit()
+        {
+            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
+            string sqlExpression = $"SELECT directory FROM directories JOIN `directories-users` ON directories.id = `directories-users`.directory_id JOIN users ON `directories-users`.user_id = users.id WHERE users.login =\"{activeUser}\"";
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand(sqlExpression, connection);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            directories.Add(reader.GetString(0));
+                        }
+                    }
+                }
+            }
+        }
     }
 }
