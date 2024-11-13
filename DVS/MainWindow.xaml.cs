@@ -25,17 +25,19 @@ namespace MediaPlayerApp
     public partial class MainWindow : Window
     {
         private int currentTrackIndex = -1; // индекс песни в очереди
+        private int MaxTrackIndex = 0;
         private bool isDragging = false; // если нет перемещения ползунка
         private bool isPaused = true; // если нет паузы
         private readonly DispatcherTimer timer = new DispatcherTimer();
         public static string activeUser;
         List<string> directories = new List<string>();
+        public static bool isWindowOpened = false;
 
         public ObservableCollection<MusicFile> MusicQueue { get; set; } // список очереди
         public MainWindow()
         {
             InitializeComponent();
-            
+            //MusicQueue = new ObservableCollection<MusicFile>();
             bPause.Focus();
         }
         private void OpenFolder_Click(object sender, RoutedEventArgs e)
@@ -51,6 +53,7 @@ namespace MediaPlayerApp
 
         void OpenFolders(string path)
         {
+            MaxTrackIndex = MusicQueue.Count() - 1;
             timer.IsEnabled = true;
             timer.Interval = TimeSpan.FromMilliseconds(1);
             timer.Tick += Timer_Tick;
@@ -60,7 +63,7 @@ namespace MediaPlayerApp
             //MusicArea.Children.Clear();
             foreach (var file in audioFiles)
             {
-                currentTrackIndex++;
+                MaxTrackIndex++;
                 GetAndSetInfoMusic(file);
                 MusicFile music = new MusicFile
                 {
@@ -71,7 +74,7 @@ namespace MediaPlayerApp
                 MusicQueue.Add(music);
                 System.Windows.Controls.Button button = new System.Windows.Controls.Button
                 {
-                    Content = System.IO.Path.GetFileNameWithoutExtension(file),
+                    Content = GetAndSetInfoMusic(file),
                     Width = 1450,
                     Height = 50,
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
@@ -82,22 +85,17 @@ namespace MediaPlayerApp
                     FontFamily = new FontFamily("Nunito"),
                     FontSize = 18,
                     Style = (Style)FindResource("RoundButtonStyle"),
-                    Tag = currentTrackIndex
+                    Tag = MaxTrackIndex
                 };
                 button.Click += MusicMouse;
                 MusicArea.Children.Add(button);
                 DbConnect(music.FileDirectory, music.Title, activeUser);
             }
             // Начинаем воспроизведение первой песни, если есть файлы
-            if (MusicQueue.Count > 0)
+            if (MusicQueue.Count > 0 && currentTrackIndex == -1)
             {
                 currentTrackIndex = 0; // Устанавливаем индекс на первый трек
                 GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath);
-            }
-            if (!isPaused)
-            {
-                PlayImage.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
-                mediaElement.Play();
             }
         }
 
@@ -108,33 +106,41 @@ namespace MediaPlayerApp
             int trackIndex = (int)clickedButton.Tag;
             currentTrackIndex = trackIndex;
             if (clickedButton != null)
-            { 
-                GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath); // Воспроизводим музыку
+            {
+                isPaused = false;
+                mediaElement.Play();
+                PlayImage.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
+                GetAndSetInfoMusic(MusicQueue[trackIndex].FilePath); // Воспроизводим музыку
             }
         }
         private void Pause()
         {
-            if (mediaElement.HasAudio)
+            if (mediaElement.Source != null)
                 isPaused = !isPaused;
             mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
-            if (isPaused && mediaElement.HasAudio)
+            if (isPaused && mediaElement.Source != null)
             {
                 mediaElement.Pause();
                 PlayImage.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
             }
-            if (!isPaused && mediaElement.HasAudio)
+            if (!isPaused && mediaElement.Source != null)
             {
                 mediaElement.Play();
                 PlayImage.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
             }
         }
+        private void Pause_Click(object sender, RoutedEventArgs e)
+        {
+            Pause();
+        }
         // Метод который выводит информацию и задаёт путь следующей музыки в очереди
-        private void GetAndSetInfoMusic(string file)
+        private string GetAndSetInfoMusic(string file)
         {
             var audioFile = TagLib.File.Create(file);
             trackTitle.Text = audioFile.Tag.Title ?? System.IO.Path.GetFileNameWithoutExtension(file);
             trackMusician.Text = string.Join(", ", audioFile.Tag.Performers);
             mediaElement.Source = new Uri(file);
+            return trackTitle.Text;
         }
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
@@ -142,18 +148,18 @@ namespace MediaPlayerApp
         }
         private void NextTrack()
         {
-            if (MusicQueue.Count > 0)
+            if (MusicQueue.Count != 0)
             {
                 currentTrackIndex++;
                 // Проверяем, не вышли ли мы за пределы списка
-                if (currentTrackIndex >= MusicQueue.Count && MusicQueue.Count > 0)
+                if (currentTrackIndex >= MusicQueue.Count && MusicQueue.Count != 0)
                 {
                     currentTrackIndex = 0;
                     isPaused = true; // т.к очередь закончилась, ставим на паузу
                     PlayImage.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
                     mediaElement.Stop();
                 }
-                if (mediaElement.HasAudio)
+                if (mediaElement.Source != null)
                     GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath);
             }
 
@@ -240,10 +246,6 @@ namespace MediaPlayerApp
                 mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
             }
         }  
-        private void Pause_Click(object sender, RoutedEventArgs e)
-        {
-            Pause();
-        }
         // ползунок перемещается
         private void sMusic_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
@@ -281,15 +283,6 @@ namespace MediaPlayerApp
                 mediaElement.Pause();
                 mediaElement.Position += TimeSpan.FromSeconds(sMusic.Maximum / 100d);
             }
-        }
-        private void Up_Click(object sender, RoutedEventArgs e)
-        {
-            scroll.LineUp();
-        }
-
-        private void Down_Click(object sender, RoutedEventArgs e)
-        {
-            scroll.LineDown();
         }
         // передвижение мышки по точке и захват мыши
         private void sMusic_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -369,12 +362,11 @@ namespace MediaPlayerApp
 
         private void Window_Initialized(object sender, EventArgs e)
         {
+            isWindowOpened = true;
             DbInit();
-
+            MusicQueue = new ObservableCollection<MusicFile>();
             if (directories.Count > 0 && directories != null)
             {
-                MusicQueue = new ObservableCollection<MusicFile>();
-
                 foreach (var directory in directories)
                 {
                     OpenFolders(directory);
