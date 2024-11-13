@@ -10,5 +10,6 @@ namespace DVS
     {
         public string Title { get; set; }
         public string FilePath { get; set; }
+        public string FileDirectory { get; set; }
     }
 }

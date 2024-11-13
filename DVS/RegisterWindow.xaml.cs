@@ -14,6 +14,9 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using Microsoft.Data.Sqlite;
 using System.IO;
+using System.Windows.Forms;
+
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace DVS
 {
@@ -40,18 +43,18 @@ namespace DVS
                     }
                     else
                     {
-                        MessageBox.Show("Пользователь с таким именем уже существует", "Ошибка!");
+                        MessageBox.Show("Пользователь с таким именем уже существует", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
 
                 else
                 {
-                    MessageBox.Show("Пароли не совпадают", "Ошибка!");
+                    MessageBox.Show("Пароли не совпадают", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show("Логин и/или пароль содержат неразрешенные символы!", "Ошибка!");
+                MessageBox.Show("Логин и/или пароль содержат неразрешенные символы!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         bool CheckTextBox()
@@ -59,7 +62,7 @@ namespace DVS
             Regex logRegex = new Regex("[^a-zA-Z0-9]");
             Regex passRegex = new Regex(@"\s");
 
-            if(logRegex.IsMatch(tLogin.Text) || passRegex.IsMatch(tPassword.Text) || tLogin.Text == "" || tPassword.Text == "" || tCheckPassword.Text == "")
+            if(logRegex.IsMatch(tLogin.Text) || passRegex.IsMatch(tPassword.Password) || tLogin.Text == "" || tPassword.Password == "" || tCheckPassword.Password == "")
             {
                 return false;
             }
@@ -71,7 +74,7 @@ namespace DVS
 
         bool CheckPassword()
         {
-            if(tPassword.Text == tCheckPassword.Text)
+            if(tPassword.Password == tCheckPassword.Password)
             {
                 return true;
             }
@@ -111,12 +114,10 @@ namespace DVS
                 command.Connection = connection;
                 command.CommandText = commandText;
                 command.Parameters.AddWithValue("@login", tLogin.Text);
-                command.Parameters.AddWithValue ("@password", tPassword.Text);
+                command.Parameters.AddWithValue ("@password", tPassword.Password);
 
                 command.ExecuteNonQuery();
             }
         }
-
-
     }
 }

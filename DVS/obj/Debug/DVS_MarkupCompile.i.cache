@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\Сергей\Desktop\DVS\DVS\obj\Debug\
+C:\Users\Привет\source\repos\DVS\obj\Debug\
 DVS
 none
 false
 DEBUG;TRACE
-C:\Users\Сергей\Desktop\DVS\DVS\App.xaml
-4-1282377453
+C:\Users\Привет\source\repos\DVS\App.xaml
+6-1074525369
 
 101571709337
-1281080890744
-DictionaryButton.xaml;LoginWindow.xaml;MainWindow.xaml;RegisterWindow.xaml;
+1281660683592
+DictionaryBox.xaml;DictionaryButton.xaml;DictionaryCheckBox.xaml;LoginWindow.xaml;MainWindow.xaml;RegisterWindow.xaml;
 
-True
+False
 

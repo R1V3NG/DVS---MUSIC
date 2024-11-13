@@ -29,7 +29,7 @@ namespace DVS
         }
 
         string activeUser;
-        bool isCorrect = false;
+        public static bool isCorrect = false;
 
         public static string path = @"audioplayer.db";
 
@@ -54,7 +54,7 @@ namespace DVS
         bool CheckTextBox()
         {
             Regex regex = new Regex(@"\s");
-            if(regex.IsMatch(tLogin.Text) || regex.IsMatch(tPassword.Text) || tLogin.Text == "" || tPassword.Text == "")
+            if(regex.IsMatch(tLogin.Text) || regex.IsMatch(tPassword.Password) || tLogin.Text == "" || tPassword.Password == "")
             {
                 return false;
             }
@@ -93,9 +93,9 @@ namespace DVS
         {
             foreach (var user in users)
             {
-                if (user.login == tLogin.Text && user.password == tPassword.Text)
+                if (user.login == tLogin.Text && user.password == tPassword.Password)
                 {
-                    activeUser = user.login;
+                    MainWindow.activeUser = user.login;
                     isCorrect = true;
                 }
             }

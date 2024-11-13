@@ -5,15 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DVS"
         mc:Ignorable="d"
-        Title="RegisterWindow" Height="281" Width="290">
-    <Grid>
-        <Label Content="Логин:" HorizontalAlignment="Left" Margin="10,56,0,0" VerticalAlignment="Top"/>
-        <Label Content="Пароль:" HorizontalAlignment="Left" Margin="10,87,0,0" VerticalAlignment="Top"/>
-        <Label Content="Повторите пароль:" HorizontalAlignment="Left" Margin="10,118,0,0" VerticalAlignment="Top"/>
-        <TextBox Name="tCheckPassword" HorizontalAlignment="Left" Margin="131,126,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="tPassword" HorizontalAlignment="Left" Margin="131,95,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox Name="tLogin" HorizontalAlignment="Left" Margin="131,60,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Button Content="Зарегистрироваться" HorizontalAlignment="Left" Margin="76,182,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-
+        Title="Регистрация" Height="700" Width="700" Background="#FF1E1E1E" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="DictionaryButton.xaml"/>
+                <ResourceDictionary Source="DictionaryBox.xaml"/>
+                <!-- Подключаем словарь ресурсов -->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Background="Transparent" ShowGridLines="False">
+        <StackPanel Width="600"
+                    Grid.Row="2"
+                    Orientation="Vertical">
+            <Label Content="Логин:" Margin="0,100,0,5" HorizontalAlignment="Left" Foreground="White" Height="40" Width="100" FontSize="24"/>
+            <TextBox x:Name="tLogin" Style="{StaticResource RoundBox}" Margin="150,-40,0,0" TextWrapping="Wrap" HorizontalAlignment="Right" Width="350" Height="40" FontSize="26"/>
+            <Label Content="Пароль:" Margin="0,5,0,0" HorizontalAlignment="Left" Foreground="White" Height="40" Width="100" FontSize="24"/>
+            <Label Content="Повторите пароль:" Margin="0,15,0,0" HorizontalAlignment="Left" Foreground="White" Height="40" Width="220" FontSize="24"/>
+            <PasswordBox Name="tPassword" Style="{StaticResource RoundPBox}" Margin="150,-90,0,10" HorizontalAlignment="Right" VerticalAlignment="Top" Width="350" Height="40" FontSize="26"/>
+            <PasswordBox Name="tCheckPassword" Style="{StaticResource RoundPBox}" Margin="150,-40,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="350" Height="40" FontSize="26"/>
+            <Button Content="Зарегистрироваться" Margin="0,75,0,0" Foreground="White" Style="{StaticResource RoundButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click" Height="100" Width="300
+        " FontSize="24"/>
+        </StackPanel>
     </Grid>
 </Window>
