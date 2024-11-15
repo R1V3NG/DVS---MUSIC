@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using MediaPlayerApp;
 using Microsoft.Data.Sqlite;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 
 namespace DVS
 {
@@ -118,7 +119,7 @@ namespace DVS
             {
                 
 
-                if (user.login == tLogin.Text && user.password == tPassword.Password)
+                if (user.login == tLogin.Text && user.password == RegisterWindow.HashPassword(tPassword.Password))
                 {
                     MainWindow.activeUser = user.login;
                     isCorrect = true;

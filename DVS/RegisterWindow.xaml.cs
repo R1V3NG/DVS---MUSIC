@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Data.Sqlite;
 using System.IO;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -29,6 +30,7 @@ namespace DVS
         {
             InitializeComponent();
         }
+
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -61,8 +63,10 @@ namespace DVS
         {
             Regex logRegex = new Regex("[^a-zA-Z0-9]");
             Regex passRegex = new Regex(@"\s");
+            Regex sizePassRegex = new Regex(@"\S\S\S\S\S\S");
+            Regex sizeLogRegex = new Regex(@"\S\S\S");
 
-            if(logRegex.IsMatch(tLogin.Text) || passRegex.IsMatch(tPassword.Password) || tLogin.Text == "" || tPassword.Password == "" || tCheckPassword.Password == "")
+            if(logRegex.IsMatch(tLogin.Text) || passRegex.IsMatch(tPassword.Password) || tLogin.Text == "" || tPassword.Password == "" || tCheckPassword.Password == "" || !sizeLogRegex.IsMatch(tLogin.Text) || !sizePassRegex.IsMatch(tPassword.Password))
             {
                 return false;
             }
@@ -114,10 +118,22 @@ namespace DVS
                 command.Connection = connection;
                 command.CommandText = commandText;
                 command.Parameters.AddWithValue("@login", tLogin.Text);
-                command.Parameters.AddWithValue ("@password", tPassword.Password);
+                command.Parameters.AddWithValue ("@password", HashPassword(tPassword.Password));
 
                 command.ExecuteNonQuery();
             }
+        }
+
+        public static string HashPassword(string password)
+        {
+            string hash;
+            using(SHA1 sha1Hash = SHA1.Create())
+            {
+                byte[] sourceBytes = Encoding.UTF8.GetBytes(password);
+                byte[] hashBytes = sha1Hash.ComputeHash(sourceBytes);
+                hash = BitConverter.ToString(hashBytes).Replace("-", String.Empty);
+            }
+            return hash;
         }
     }
 }
