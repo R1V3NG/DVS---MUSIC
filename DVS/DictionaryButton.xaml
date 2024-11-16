@@ -37,6 +37,42 @@
         <Setter Property="Height" Value="50"/>
         <!-- Высота кнопки -->
     </Style>
+
+    <Style x:Key="SongButtonStyle" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        CornerRadius="10">
+                        <!-- Устанавливаем радиус закругления -->
+                        <Grid>
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                          Margin="50,0,0,0" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#393939"/>
+                            <!-- Цвет при наведении -->
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#303030"/>
+                            <!-- Цвет при нажатии -->
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Background" Value="#272727"/>
+        <Setter Property="BorderBrush" Value ="Transparent"/>
+        <Setter Property="Width" Value="155"/>
+        <!-- Ширина кнопки -->
+        <Setter Property="Height" Value="50"/>
+        <!-- Высота кнопки -->
+    </Style>
     <!-- Стиль для кнопки play|pause|forward|back -->
     <Style x:Key="NoHighlightButtonStyle" TargetType="Button">
         <Setter Property="Template">
@@ -67,5 +103,38 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Foreground" Value="Black" />
+    </Style>
+    
+    <Style x:Key="OverlayButtonStyle" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10">
+                        <Grid>
+                            <Rectangle x:Name="Overlay" Fill="#D9D9D9" RadiusX="10" RadiusY="10" Opacity="0.15" Visibility="Hidden"/>
+                            <Rectangle x:Name="LeftStrip" Fill="#D55CFF" Width="5" HorizontalAlignment="Left" Visibility="Hidden" VerticalAlignment="Stretch" />
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Overlay" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="border" Property="Background"  Value="#FF1D1D1D"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Overlay" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="LeftStrip" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="border" Property="Background"  Value="#FF2B2B2B"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0,0,0,0"/>
     </Style>
 </ResourceDictionary>

@@ -91,6 +91,7 @@
       <DependentUpon>RegisterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Users.cs" />
+    <Compile Include="VolumeSettings.cs" />
     <Page Include="DictionaryBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -178,6 +179,33 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="VolumeSettings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="muteVolume.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="mute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="LowVolume.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="AverageVolume.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="HighVolume.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Library.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Playlist.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoAlbums.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

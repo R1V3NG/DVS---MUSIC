@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Data.Sqlite;
 using System.IO;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -30,13 +31,14 @@ namespace DVS
             InitializeComponent();
         }
 
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if(CheckTextBox())
+            if (CheckTextBox())
             {
                 if (CheckPassword())
                 {
-                    if(CheckLogin())
+                    if (CheckLogin())
                     {
                         DbConnect();
                         Close();
@@ -52,29 +54,45 @@ namespace DVS
                     MessageBox.Show("Пароли не совпадают", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else
-            {
-                MessageBox.Show("Логин и/или пароль содержат неразрешенные символы!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
         bool CheckTextBox()
         {
             Regex logRegex = new Regex("[^a-zA-Z0-9]");
             Regex passRegex = new Regex(@"\s");
+            Regex sizePassRegex = new Regex(@"\S\S\S\S\S\S");
+            Regex sizeLogRegex = new Regex(@"\S\S\S");
 
-            if(logRegex.IsMatch(tLogin.Text) || passRegex.IsMatch(tPassword.Password) || tLogin.Text == "" || tPassword.Password == "" || tCheckPassword.Password == "")
+            if (logRegex.IsMatch(tLogin.Text))
             {
+                MessageBox.Show("Логин может содержать только латинские буквы и цифры!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            else
+            if (passRegex.IsMatch(tPassword.Password))
             {
-                return true;
+                MessageBox.Show("Пароль не может содержать пробелы!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
+            if (tLogin.Text == "" || tPassword.Password == "" || tCheckPassword.Password == "")
+            {
+                MessageBox.Show("Все поля обязательны к заполнению!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (!sizeLogRegex.IsMatch(tLogin.Text))
+            {
+                MessageBox.Show("Логин должен содержать минимум 3 символа!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (!sizePassRegex.IsMatch(tPassword.Password))
+            {
+                MessageBox.Show("Пароль должен содержать минимум 6 символов!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
         }
 
         bool CheckPassword()
         {
-            if(tPassword.Password == tCheckPassword.Password)
+            if (tPassword.Password == tCheckPassword.Password)
             {
                 return true;
             }
@@ -91,9 +109,9 @@ namespace DVS
 
             bool isCorrect = true;
 
-            foreach(var user in LoginWindow.users)
+            foreach (var user in LoginWindow.users)
             {
-                if(user.login == tLogin.Text)
+                if (user.login == tLogin.Text)
                 {
                     isCorrect = false;
                 }
@@ -104,7 +122,7 @@ namespace DVS
         void DbConnect()
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
-            using(var connection = new SqliteConnection(connectionString))
+            using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
@@ -114,10 +132,22 @@ namespace DVS
                 command.Connection = connection;
                 command.CommandText = commandText;
                 command.Parameters.AddWithValue("@login", tLogin.Text);
-                command.Parameters.AddWithValue ("@password", tPassword.Password);
+                command.Parameters.AddWithValue("@password", HashPassword(tPassword.Password));
 
                 command.ExecuteNonQuery();
             }
+        }
+
+        public static string HashPassword(string password)
+        {
+            string hash;
+            using (SHA1 sha1Hash = SHA1.Create())
+            {
+                byte[] sourceBytes = Encoding.UTF8.GetBytes(password);
+                byte[] hashBytes = sha1Hash.ComputeHash(sourceBytes);
+                hash = BitConverter.ToString(hashBytes).Replace("-", String.Empty);
+            }
+            return hash;
         }
     }
 }

@@ -10,5 +10,6 @@ namespace DVS
     {
         public string login {  get; set; }
         public string password { get; set; }
+        public bool isRemember { get; set; }
     }
 }

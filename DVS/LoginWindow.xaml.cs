@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using MediaPlayerApp;
 using Microsoft.Data.Sqlite;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 
 namespace DVS
 {
@@ -28,7 +29,8 @@ namespace DVS
             InitializeComponent();
         }
 
-        string activeUser;
+        bool isRememberPressed;
+        bool isWasRemember;
         public static bool isCorrect = false;
 
         public static string path = @"audioplayer.db";
@@ -40,7 +42,7 @@ namespace DVS
             Err.Visibility = Visibility.Hidden;
             users.Clear();
 
-            if(CheckTextBox())
+            if (CheckTextBox())
             {
                 DbConnect();
                 CheckData();
@@ -54,7 +56,7 @@ namespace DVS
         bool CheckTextBox()
         {
             Regex regex = new Regex(@"\s");
-            if(regex.IsMatch(tLogin.Text) || regex.IsMatch(tPassword.Password) || tLogin.Text == "" || tPassword.Password == "")
+            if (regex.IsMatch(tLogin.Text) || regex.IsMatch(tPassword.Password) || tLogin.Text == "" || tPassword.Password == "")
             {
                 return false;
             }
@@ -66,7 +68,7 @@ namespace DVS
 
         public static void DbConnect()
         {
-            string sqlExpression = "SELECT login, password FROM users";
+            string sqlExpression = "SELECT login, password, isRemember FROM users";
             string connectionString = $"Data Source={path};Mode=ReadWrite";
 
             using (var conn = new SqliteConnection(connectionString))
@@ -81,7 +83,7 @@ namespace DVS
                     {
                         while (reader.Read())
                         {
-                            users.Add(new Users() { login = Convert.ToString(reader.GetValue(0)), password = Convert.ToString(reader.GetValue(1)) });
+                            users.Add(new Users() { login = Convert.ToString(reader.GetValue(0)), password = Convert.ToString(reader.GetValue(1)), isRemember = Convert.ToBoolean(reader.GetValue(2)) });
                         }
                     }
                 }
@@ -89,11 +91,41 @@ namespace DVS
 
         }
 
+        void DbRemember(string user)
+        {
+            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand();
+                command.Connection = connection;
+                command.CommandText = "UPDATE users SET isRemember = 0";
+                command.Parameters.AddWithValue("@login", user);
+
+                command.ExecuteNonQuery();
+
+                if (isRememberPressed)
+                {
+                    command.CommandText = "UPDATE users SET isRemember = 1 WHERE login = @login";
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
         void CheckData()
         {
             foreach (var user in users)
             {
-                if (user.login == tLogin.Text && user.password == tPassword.Password)
+
+
+                if (user.login == tLogin.Text && user.password == RegisterWindow.HashPassword(tPassword.Password))
+                {
+                    MainWindow.activeUser = user.login;
+                    isCorrect = true;
+                    DbRemember(user.login);
+                }
+                if (user.isRemember && !isCorrect)
                 {
                     MainWindow.activeUser = user.login;
                     isCorrect = true;
@@ -104,9 +136,11 @@ namespace DVS
             {
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.Show();
+
+
                 Close();
             }
-            else
+            else if (tLogin.Text != "" && tPassword.Password != "")
             {
                 Err.Visibility = Visibility.Visible;
             }
@@ -116,6 +150,26 @@ namespace DVS
         {
             RegisterWindow registerWindow = new RegisterWindow();
             registerWindow.Show();
+        }
+
+        private void RememberMeCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            isRememberPressed = true;
+        }
+
+        private void RememberMeCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            isRememberPressed = false;
+        }
+
+        private void Window_Initialized(object sender, EventArgs e)
+        {
+            Err.Visibility = Visibility.Hidden;
+            if (!MainWindow.isWindowOpened)
+            {
+                DbConnect();
+                CheckData();
+            }
         }
     }
 }
