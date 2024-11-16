@@ -54,10 +54,6 @@ namespace DVS
                     MessageBox.Show("Пароли не совпадают", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else
-            {
-                MessageBox.Show("Логин и/или пароль содержат неразрешенные символы!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
         bool CheckTextBox()
         {
@@ -66,14 +62,32 @@ namespace DVS
             Regex sizePassRegex = new Regex(@"\S\S\S\S\S\S");
             Regex sizeLogRegex = new Regex(@"\S\S\S");
 
-            if(logRegex.IsMatch(tLogin.Text) || passRegex.IsMatch(tPassword.Password) || tLogin.Text == "" || tPassword.Password == "" || tCheckPassword.Password == "" || !sizeLogRegex.IsMatch(tLogin.Text) || !sizePassRegex.IsMatch(tPassword.Password))
+            if(logRegex.IsMatch(tLogin.Text))
             {
+                MessageBox.Show("Логин может содержать только латинские буквы и цифры!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            else
+            if (passRegex.IsMatch(tPassword.Password))
             {
-                return true;
+                MessageBox.Show("Пароль не может содержать пробелы!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
+            if (tLogin.Text == "" || tPassword.Password == "" || tCheckPassword.Password == "")
+            {
+                MessageBox.Show("Все поля обязательны к заполнению!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (!sizeLogRegex.IsMatch(tLogin.Text))
+            {
+                MessageBox.Show("Логин должен содержать минимум 3 символа!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (!sizePassRegex.IsMatch(tPassword.Password))
+            {
+                MessageBox.Show("Пароль должен содержать минимум 6 символов!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
         }
 
         bool CheckPassword()
