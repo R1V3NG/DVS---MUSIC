@@ -20,6 +20,8 @@ using Microsoft.Data.Sqlite;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 using System.Collections.Generic;
+using TagLib.Mpeg;
+using System.Runtime.InteropServices.ComTypes;
 namespace MediaPlayerApp
 {
     public partial class MainWindow : Window
@@ -27,10 +29,13 @@ namespace MediaPlayerApp
         private int currentTrackIndex = -1; // индекс песни в очереди
         private int MaxTrackIndex = 0;
         private bool isDragging = false; // если нет перемещения ползунка
+        private bool VolumeisDragging = false;
         private bool isPaused = true; // если нет паузы
         private readonly DispatcherTimer timer = new DispatcherTimer();
         public static string activeUser;
         List<string> directories = new List<string>();
+        List<Playlist> playlists = new List<Playlist>();
+        List<Songs> songs = new List<Songs>();
         public static bool isWindowOpened = false;
 
         public ObservableCollection<MusicFile> MusicQueue { get; set; } // список очереди
@@ -39,6 +44,11 @@ namespace MediaPlayerApp
             InitializeComponent();
             //MusicQueue = new ObservableCollection<MusicFile>();
             bPause.Focus();
+            VolumeLevel.Content = Convert.ToString(VolumeSlider.Value*100);
+            VolumeSlider.Value = VolumeSettings.LoadVolume(); // При инициализации вызываю метод класса, в котором вовзращаю сохраннённую громкость
+            this.Closing += MainWindow_Closing;
+            UpdateVolumeImage(); //Обновляем изображение громкости при инициализации
+            
         }
         private void OpenFolder_Click(object sender, RoutedEventArgs e)
         {
@@ -76,15 +86,15 @@ namespace MediaPlayerApp
                 {
                     Content = GetAndSetInfoMusic(file),
                     Width = 1450,
-                    Height = 50,
+                    Height = 45,
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                     VerticalAlignment = System.Windows.VerticalAlignment.Top,
                     HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
                     Margin = new Thickness(50, 5, 50, 10),
                     Foreground = new SolidColorBrush(Colors.White),
                     FontFamily = new FontFamily("Nunito"),
-                    FontSize = 18,
-                    Style = (Style)FindResource("RoundButtonStyle"),
+                    FontSize = 16,
+                    Style = (Style)FindResource("SongButtonStyle"),
                     Tag = MaxTrackIndex
                 };
                 button.Click += MusicMouse;
@@ -92,7 +102,7 @@ namespace MediaPlayerApp
                 DbConnect(music.FileDirectory, music.Title, activeUser);
             }
             // Начинаем воспроизведение первой песни, если есть файлы
-            if (MusicQueue.Count > 0 && currentTrackIndex == -1)
+            if (MusicQueue.Count > currentTrackIndex - 1)
             {
                 currentTrackIndex = 0; // Устанавливаем индекс на первый трек
                 GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath);
@@ -140,7 +150,30 @@ namespace MediaPlayerApp
             trackTitle.Text = audioFile.Tag.Title ?? System.IO.Path.GetFileNameWithoutExtension(file);
             trackMusician.Text = string.Join(", ", audioFile.Tag.Performers);
             mediaElement.Source = new Uri(file);
+            lEnd.Content = audioFile.Properties.Duration.ToString(@"hh\:mm\:ss");
+            LoadAlbumArt(file);
             return trackTitle.Text;
+        }
+        private void LoadAlbumArt(string filePath)
+        {
+            AlbumImage.Source = new BitmapImage(new Uri("/NoAlbums.png", UriKind.Relative));
+            var file = TagLib.File.Create(filePath);
+            if (file.Tag.Pictures.Length > 0)
+            {
+                var picture = file.Tag.Pictures[0]; // Извлекаем первое изображение
+                using(var stream = new MemoryStream(picture.Data.Data))
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = stream;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    bitmap.Freeze(); // Замораживаем объект для потокобезопасности
+
+                    // Устанавливаем изображение в элемент Image
+                    AlbumImage.Source = bitmap;
+                }
+            }
         }
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
@@ -161,6 +194,28 @@ namespace MediaPlayerApp
                 }
                 if (mediaElement.Source != null)
                     GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath);
+            }
+
+        }
+        private async void TrackWithDelay()
+        {
+            if (MusicQueue.Count != 0)
+            {
+                currentTrackIndex++;
+                // Проверяем, не вышли ли мы за пределы списка
+                if (currentTrackIndex >= MusicQueue.Count && MusicQueue.Count != 0)
+                {
+                    currentTrackIndex = 0;
+                    isPaused = true; // т.к очередь закончилась, ставим на паузу
+                    PlayImage.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
+                    mediaElement.Stop();
+                }
+                if (mediaElement.Source != null)
+                    GetAndSetInfoMusic(MusicQueue[currentTrackIndex].FilePath);
+                mediaElement.Stop();
+                await Task.Delay(700);
+                // Начинаем воспроизведение следующего трека
+                mediaElement.Play();
             }
 
         }
@@ -234,35 +289,17 @@ namespace MediaPlayerApp
             else
             {
                 lStart.Content = "00:00:00";
-                lEnd.Content = "00:00:00";
             }
         }
-        //Перенос ползунка по точке
-        private void sMusic_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> args)
-        {
-            if (!isDragging && mediaElement.NaturalDuration.HasTimeSpan && 
-               (((mediaElement.Position - TimeSpan.FromSeconds(args.NewValue)) > TimeSpan.FromSeconds(0.5)) || (TimeSpan.FromSeconds(args.NewValue) - mediaElement.Position > TimeSpan.FromSeconds(0.5))))
-            {
-                mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
-            }
-        }  
-        // ползунок перемещается
-        private void sMusic_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
-        {
-            isDragging = true;
-        }
-        // ползунок не перемещается
-        private void sMusic_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
-        {
-            isDragging = false;
-            mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
-        }
+        //Перенос ползунка по точке   
         // конец песни
         private void MediaElement_MediaEnded(object sender, EventArgs e)
         {
             sMusic.Value = 0;
-            NextTrack();
-
+            if (currentTrackIndex == MaxTrackIndex)
+                NextTrack();
+            else
+                TrackWithDelay();
         }
         // условия для play с помощью стрелок
         private void bPause_PreviewKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
@@ -283,6 +320,25 @@ namespace MediaPlayerApp
                 mediaElement.Pause();
                 mediaElement.Position += TimeSpan.FromSeconds(sMusic.Maximum / 100d);
             }
+        }
+        private void sMusic_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> args)
+        {
+            if (!isDragging && mediaElement.NaturalDuration.HasTimeSpan &&
+               (((mediaElement.Position - TimeSpan.FromSeconds(args.NewValue)) > TimeSpan.FromSeconds(0.5)) || (TimeSpan.FromSeconds(args.NewValue) - mediaElement.Position > TimeSpan.FromSeconds(0.5))))
+            {
+                mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
+            }
+        }
+        // ползунок перемещается
+        private void sMusic_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+        {
+            isDragging = true;
+        }
+        // ползунок не перемещается
+        private void sMusic_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            isDragging = false;
+            mediaElement.Position = TimeSpan.FromSeconds(sMusic.Value);
         }
         // передвижение мышки по точке и захват мыши
         private void sMusic_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -315,7 +371,69 @@ namespace MediaPlayerApp
                 isDragging = false;
             }
         }
-        // пока не знаем, что будет
+        private void VolumeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (VolumeArea.Visibility == Visibility.Visible)
+            {
+                VolumeArea.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                VolumeArea.Visibility = Visibility.Visible;
+            }
+        }
+        private void UpdateVolumeImage()
+        {
+            if (Convert.ToInt16(VolumeLevel.Content) == 0 )
+            {
+                ImageVolumeLevel.Source = new BitmapImage(new Uri("/mute.png", UriKind.Relative));
+                ImageVolume.Source = new BitmapImage(new Uri("/mute.png", UriKind.Relative));
+            }
+            if (Convert.ToInt16(VolumeLevel.Content) > 0 && Convert.ToInt16(VolumeLevel.Content) <= 32)
+            {
+                ImageVolumeLevel.Source = new BitmapImage(new Uri("/LowVolume.png", UriKind.Relative));
+                ImageVolume.Source = new BitmapImage(new Uri("/LowVolume.png", UriKind.Relative));
+            }
+            if (Convert.ToInt16(VolumeLevel.Content) > 32 && Convert.ToInt16(VolumeLevel.Content) <= 65)
+            {
+                ImageVolumeLevel.Source = new BitmapImage(new Uri("/AverageVolume.png", UriKind.Relative));
+                ImageVolume.Source = new BitmapImage(new Uri("/AverageVolume.png", UriKind.Relative));
+            }
+            if (Convert.ToInt16(VolumeLevel.Content) > 65)
+            {
+                ImageVolumeLevel.Source = new BitmapImage(new Uri("/HighVolume.png", UriKind.Relative));
+                ImageVolume.Source = new BitmapImage(new Uri("/HighVolume.png", UriKind.Relative));
+            }
+        }
+        private void VolumeSlider_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                UpdateVolumeImage();
+                VolumeisDragging = true;
+                VolumeSlider.CaptureMouse(); // захват мыши
+                Point position = e.GetPosition(VolumeSlider);
+                double d = 1.0d / VolumeSlider.ActualWidth * position.X;
+                VolumeSlider.Value = VolumeSlider.Maximum * d;
+            }
+        }
+        private void VolumeSlider_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (VolumeisDragging)
+            {
+                VolumeSlider.ReleaseMouseCapture();// после перетаскивания сразу отпускаю мышь
+                VolumeisDragging = false;
+            }
+            UpdateVolumeImage();
+        }
+        // передаём значение в label
+        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            int volumePercentage = (int)(e.NewValue * 100);
+            mediaElement.Volume = e.NewValue;
+            if (VolumeLevel != null)
+                VolumeLevel.Content = Convert.ToString(volumePercentage);
+        }
         private void RegistrationButton_Click(object sender, RoutedEventArgs e)
         {
             LoginWindow.isCorrect = false;
@@ -327,7 +445,63 @@ namespace MediaPlayerApp
                 Close();
             }
         }
+        //Меняю выделение и видимость панельки
+        private void Library_Click(object sender, RoutedEventArgs e)
+        {
+            SetButtonSelected(Library);
+            if (PlaylistArea.Visibility == Visibility.Visible)
+            {
+                PlaylistArea.Visibility = Visibility.Collapsed;
+                MusicPlaylist.Visibility = Visibility.Collapsed;
+                MusicArea.Visibility = Visibility.Visible;
+                LabelInfo.Visibility = Visibility.Visible;
+                OpenFile.Visibility = Visibility.Visible;
+            }
+                
+        }
 
+        private void Playlists_Click(object sender, RoutedEventArgs e)
+        {
+            SetButtonSelected(Playlists);
+            if (PlaylistArea.Visibility == Visibility.Collapsed)
+            {
+                PlaylistArea.Visibility = Visibility.Visible;
+                MusicPlaylist.Visibility = Visibility.Visible;
+                MusicArea.Visibility = Visibility.Collapsed;
+                LabelInfo.Visibility = Visibility.Collapsed;
+                OpenFile.Visibility = Visibility.Collapsed;
+            }
+        }
+        //Установка выделения
+        private void SetButtonSelected(System.Windows.Controls.Button selectedButton)
+        {
+            // Сбросить выделение для обеих кнопок
+            ResetButtonSelection();
+
+            // Установить выделение для выбранной кнопки
+            var leftStrip = (Rectangle)selectedButton.Template.FindName("LeftStrip", selectedButton);
+            if (leftStrip != null)
+            {
+                leftStrip.Visibility = Visibility.Visible; // Показать LeftStrip
+            }
+        }
+        // Сбросить выделение для обеих кнопок
+        private void ResetButtonSelection()
+        {
+            // Сбросить выделение для кнопки "Библиотека"
+            var libraryLeftStrip = (Rectangle)Library.Template.FindName("LeftStrip", Library);
+            if (libraryLeftStrip != null)
+            {
+                libraryLeftStrip.Visibility = Visibility.Collapsed; // Скрыть LeftStrip
+            }
+
+            // Сбросить выделение для другой кнопки
+            var PlaylistLeftStrip = (Rectangle)Playlists.Template.FindName("LeftStrip", Playlists);
+            if (PlaylistLeftStrip != null)
+            {
+                PlaylistLeftStrip.Visibility = Visibility.Collapsed; // Скрыть LeftStrip
+            }
+        }
         void DbConnect(string path, string name, string user)
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
@@ -359,11 +533,15 @@ namespace MediaPlayerApp
                 command.ExecuteNonQuery();
             }
         }
-
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            SetButtonSelected(Library);
+        }
         private void Window_Initialized(object sender, EventArgs e)
         {
             isWindowOpened = true;
             DbInit();
+            ReadPlaylists();
             MusicQueue = new ObservableCollection<MusicFile>();
             if (directories.Count > 0 && directories != null)
             {
@@ -373,6 +551,12 @@ namespace MediaPlayerApp
                 }
             }
         }
+        // При закрытии формы запоминаю значение громкости
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            VolumeSettings.SaveVolume(VolumeSlider.Value); // Сохранение громкости
+        }
+
 
         void DbInit()
         {
@@ -391,6 +575,102 @@ namespace MediaPlayerApp
                         while (reader.Read())
                         {
                             directories.Add(reader.GetString(0));
+                        }
+                    }
+                }
+            }
+        }
+
+        private void AddPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            playlists.Add(new Playlist(tPlaylistName.Text, activeUser));
+            AddNewPlaylist(tPlaylistName.Text);
+        }
+
+        void AddNewPlaylist(string name)
+        {
+            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand();
+
+                command.Connection = connection;
+                command.Parameters.AddWithValue("@name", name);
+                command.Parameters.AddWithValue("@user", activeUser);
+
+                command.CommandText = "INSERT INTO playlists (name, user_id) SELECT @name, (SELECT id FROM users WHERE login=@user) WHERE NOT EXISTS (SELECT name FROM playlists WHERE name=@name)";
+                command.ExecuteNonQuery();
+            }
+        }
+
+        void ReadPlaylists()
+        {
+            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand();
+                command.Connection = connection;
+                command.CommandText= "SELECT name FROM playlists WHERE user_id=(SELECT id FROM users WHERE name=@user)";
+                command.Parameters.AddWithValue("@user", activeUser);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            playlists.Add(new Playlist(reader.GetString(0), activeUser));
+                        }
+                    }
+                }
+            }
+        }
+
+        void AddSongIntoPlaylist(string songName, string playlistName)
+        {
+            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand();
+
+                command.Connection = connection;
+                command.Parameters.AddWithValue("@songName", songName);
+                command.Parameters.AddWithValue("@playlistName", playlistName);
+                command.Parameters.AddWithValue("@user", activeUser);
+
+                command.CommandText = "INSERT INTO `music-playlists` (number_in_playlist, music_id, playlist_id) SELECT (SELECT COUNT(*) + 1 FROM `music-playlists` JOIN playlists ON `music-playlists`.playlist_id=playlists.id WHERE playlists.name=@playlistName AND user_id=(SELECT id FROM users WHERE login=@user)), (SELECT id FROM music WHERE name=@songName), (SELECT id FROM playlists WHERE name=@playlistName)";
+                command.ExecuteNonQuery();
+            }
+        }
+
+        void ReadSongsInPlaylist(string playlistName)
+        {
+            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand();
+                command.Connection = connection;
+                command.CommandText = "SELECT  playlists.name, music_names.name FROM playlists JOIN `music-playlists` ON playlists.id = `music-playlists`.playlist_id JOIN music ON `music-playlists`.music_id = music.id JOIN music_names ON music.name_id = music_names.id WHERE playlists.name = @playlistName AND playlists.user_id = (SELECT id FROM users WHERE login=@user) ORDER BY `music-playlists`.number_in_playlist";
+                command.Parameters.AddWithValue("@user", activeUser);
+                command.Parameters.AddWithValue("@playlistName", playlistName);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            songs.Add(new Songs(reader.GetString(0), reader.GetString(1)));
                         }
                     }
                 }

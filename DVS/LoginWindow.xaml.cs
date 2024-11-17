@@ -42,7 +42,7 @@ namespace DVS
             Err.Visibility = Visibility.Hidden;
             users.Clear();
 
-            if(CheckTextBox())
+            if (CheckTextBox())
             {
                 DbConnect();
                 CheckData();
@@ -56,7 +56,7 @@ namespace DVS
         bool CheckTextBox()
         {
             Regex regex = new Regex(@"\s");
-            if(regex.IsMatch(tLogin.Text) || regex.IsMatch(tPassword.Password) || tLogin.Text == "" || tPassword.Password == "")
+            if (regex.IsMatch(tLogin.Text) || regex.IsMatch(tPassword.Password) || tLogin.Text == "" || tPassword.Password == "")
             {
                 return false;
             }
@@ -83,7 +83,7 @@ namespace DVS
                     {
                         while (reader.Read())
                         {
-                            users.Add(new Users() { login = Convert.ToString(reader.GetValue(0)), password = Convert.ToString(reader.GetValue(1)), isRemember = Convert.ToBoolean(reader.GetValue(2))});
+                            users.Add(new Users() { login = Convert.ToString(reader.GetValue(0)), password = Convert.ToString(reader.GetValue(1)), isRemember = Convert.ToBoolean(reader.GetValue(2)) });
                         }
                     }
                 }
@@ -117,7 +117,7 @@ namespace DVS
         {
             foreach (var user in users)
             {
-                
+
 
                 if (user.login == tLogin.Text && user.password == RegisterWindow.HashPassword(tPassword.Password))
                 {

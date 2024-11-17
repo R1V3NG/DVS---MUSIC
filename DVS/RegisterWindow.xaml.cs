@@ -34,11 +34,11 @@ namespace DVS
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if(CheckTextBox())
+            if (CheckTextBox())
             {
                 if (CheckPassword())
                 {
-                    if(CheckLogin())
+                    if (CheckLogin())
                     {
                         DbConnect();
                         Close();
@@ -62,7 +62,7 @@ namespace DVS
             Regex sizePassRegex = new Regex(@"\S\S\S\S\S\S");
             Regex sizeLogRegex = new Regex(@"\S\S\S");
 
-            if(logRegex.IsMatch(tLogin.Text))
+            if (logRegex.IsMatch(tLogin.Text))
             {
                 MessageBox.Show("Логин может содержать только латинские буквы и цифры!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
@@ -92,7 +92,7 @@ namespace DVS
 
         bool CheckPassword()
         {
-            if(tPassword.Password == tCheckPassword.Password)
+            if (tPassword.Password == tCheckPassword.Password)
             {
                 return true;
             }
@@ -109,9 +109,9 @@ namespace DVS
 
             bool isCorrect = true;
 
-            foreach(var user in LoginWindow.users)
+            foreach (var user in LoginWindow.users)
             {
-                if(user.login == tLogin.Text)
+                if (user.login == tLogin.Text)
                 {
                     isCorrect = false;
                 }
@@ -122,7 +122,7 @@ namespace DVS
         void DbConnect()
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
-            using(var connection = new SqliteConnection(connectionString))
+            using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
@@ -132,7 +132,7 @@ namespace DVS
                 command.Connection = connection;
                 command.CommandText = commandText;
                 command.Parameters.AddWithValue("@login", tLogin.Text);
-                command.Parameters.AddWithValue ("@password", HashPassword(tPassword.Password));
+                command.Parameters.AddWithValue("@password", HashPassword(tPassword.Password));
 
                 command.ExecuteNonQuery();
             }
@@ -141,7 +141,7 @@ namespace DVS
         public static string HashPassword(string password)
         {
             string hash;
-            using(SHA1 sha1Hash = SHA1.Create())
+            using (SHA1 sha1Hash = SHA1.Create())
             {
                 byte[] sourceBytes = Encoding.UTF8.GetBytes(password);
                 byte[] hashBytes = sha1Hash.ComputeHash(sourceBytes);
