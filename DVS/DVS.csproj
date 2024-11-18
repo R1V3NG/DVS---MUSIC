@@ -87,9 +87,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Playlist.cs" />
     <Compile Include="RegisterWindow.xaml.cs">
       <DependentUpon>RegisterWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Songs.cs" />
     <Compile Include="Users.cs" />
     <Compile Include="VolumeSettings.cs" />
     <Page Include="DictionaryBox.xaml">

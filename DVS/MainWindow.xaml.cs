@@ -34,6 +34,8 @@ namespace MediaPlayerApp
         private readonly DispatcherTimer timer = new DispatcherTimer();
         public static string activeUser;
         List<string> directories = new List<string>();
+        List<Playlist> playlists = new List<Playlist>();
+        List<Songs> songs = new List<Songs>();
         public static bool isWindowOpened = false;
 
         public ObservableCollection<MusicFile> MusicQueue { get; set; } // список очереди
@@ -457,7 +459,7 @@ namespace MediaPlayerApp
             }
                 
         }
-
+        // Переключаем на плейлисты, остальные элементы скрываем или показываем
         private void Playlists_Click(object sender, RoutedEventArgs e)
         {
             SetButtonSelected(Playlists);
@@ -500,6 +502,63 @@ namespace MediaPlayerApp
                 PlaylistLeftStrip.Visibility = Visibility.Collapsed; // Скрыть LeftStrip
             }
         }
+        // Создаём плейлист в базе данных и убираем панельку с вводом данных
+        private void CreatePlaylistButton_Click(object sender, RoutedEventArgs e)
+        {
+            playlists.Add(new Playlist(tPlaylistName.Text, activeUser));
+            AddNewPlaylist(tPlaylistName.Text);
+            PlaylistName.Visibility = Visibility.Collapsed;
+            tPlaylistName.Text = "Безымянный плейлист";
+        }
+        // Кнопка показывает и убирает панель с вводом данных
+        private void AddPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            if (PlaylistName.Visibility == Visibility.Visible)
+            {
+                PlaylistName.Visibility = Visibility.Collapsed;
+            }
+            else { PlaylistName.Visibility = Visibility.Visible; }
+        }
+        //Очищаем textBox и убираем кнопку крестик
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            DownStrip.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#C0C0C0"));
+            tPlaylistName.Clear();
+            //DownStrip.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3D3D3D"));
+            ClearButton.Visibility = Visibility.Collapsed;
+        }
+        //Меняем действие с кнопкой при изменении данных
+        private void tPlaylistName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (ClearButton != null)
+            {
+                ClearButton.Visibility = string.IsNullOrWhiteSpace(tPlaylistName.Text) ? Visibility.Collapsed : Visibility.Visible;
+                if (ClearButton.Visibility == Visibility.Visible)
+                {
+                    CreatePlaylistButton.IsEnabled = true;
+                    CreatePlaylistButton.Opacity = 1;
+                }
+                else
+                {
+                    CreatePlaylistButton.IsEnabled = false;
+                    CreatePlaylistButton.Opacity = 0.5;
+                }
+            }
+        }
+        // функция для изменения border DownStrip
+        private void tPlaylistName_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Border downStrip = (Border)VisualTreeHelper.GetParent(NameArea);
+            while (downStrip != null && !(downStrip is Border))
+            {
+                downStrip = (Border)VisualTreeHelper.GetParent(downStrip);
+            }
+            if (downStrip != null)
+            {
+                downStrip.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D55CFF"));
+                DownStrip.Background = Brushes.Transparent;
+            }
+        }
         void DbConnect(string path, string name, string user)
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
@@ -539,6 +598,7 @@ namespace MediaPlayerApp
         {
             isWindowOpened = true;
             DbInit();
+            ReadPlaylists();
             MusicQueue = new ObservableCollection<MusicFile>();
             if (directories.Count > 0 && directories != null)
             {
@@ -577,5 +637,97 @@ namespace MediaPlayerApp
                 }
             }
         }
+        // добавление плейлиста в базу данных (названия не повторяются)
+        void AddNewPlaylist(string name)
+        {
+            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand();
+
+                command.Connection = connection;
+                command.Parameters.AddWithValue("@name", name);
+                command.Parameters.AddWithValue("@user", activeUser);
+
+                command.CommandText = "INSERT INTO playlists (name, user_id) SELECT @name, (SELECT id FROM users WHERE login=@user) WHERE NOT EXISTS (SELECT name FROM playlists WHERE name=@name)";
+                command.ExecuteNonQuery();
+            }
+        }
+
+        void ReadPlaylists()
+        {
+            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand();
+                command.Connection = connection;
+                command.CommandText= "SELECT name FROM playlists WHERE user_id=(SELECT id FROM users WHERE name=@user)";
+                command.Parameters.AddWithValue("@user", activeUser);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            playlists.Add(new Playlist(reader.GetString(0), activeUser));
+                        }
+                    }
+                }
+            }
+        }
+
+        void AddSongIntoPlaylist(string songName, string playlistName)
+        {
+            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand();
+
+                command.Connection = connection;
+                command.Parameters.AddWithValue("@songName", songName);
+                command.Parameters.AddWithValue("@playlistName", playlistName);
+                command.Parameters.AddWithValue("@user", activeUser);
+
+                command.CommandText = "INSERT INTO `music-playlists` (number_in_playlist, music_id, playlist_id) SELECT (SELECT COUNT(*) + 1 FROM `music-playlists` JOIN playlists ON `music-playlists`.playlist_id=playlists.id WHERE playlists.name=@playlistName AND user_id=(SELECT id FROM users WHERE login=@user)), (SELECT id FROM music WHERE name=@songName), (SELECT id FROM playlists WHERE name=@playlistName)";
+                command.ExecuteNonQuery();
+            }
+        }
+
+        void ReadSongsInPlaylist(string playlistName)
+        {
+            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand();
+                command.Connection = connection;
+                command.CommandText = "SELECT  playlists.name, music_names.name FROM playlists JOIN `music-playlists` ON playlists.id = `music-playlists`.playlist_id JOIN music ON `music-playlists`.music_id = music.id JOIN music_names ON music.name_id = music_names.id WHERE playlists.name = @playlistName AND playlists.user_id = (SELECT id FROM users WHERE login=@user) ORDER BY `music-playlists`.number_in_playlist";
+                command.Parameters.AddWithValue("@user", activeUser);
+                command.Parameters.AddWithValue("@playlistName", playlistName);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            songs.Add(new Songs(reader.GetString(0), reader.GetString(1)));
+                        }
+                    }
+                }
+            }
+        }
+
+        
     }
 }

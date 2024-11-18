@@ -137,4 +137,35 @@
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0,0,0,0"/>
     </Style>
+    <Style x:Key="PlaylistButtonStyle" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" 
+                    BorderBrush="{TemplateBinding BorderBrush}" 
+                    BorderThickness="{TemplateBinding BorderThickness}" 
+                    CornerRadius="10">
+                        <!-- Устанавливаем радиус закругления -->
+                        <Grid>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                      Margin="10,0,0,0" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#FFF434FF"/>
+                            <!-- Цвет при наведении -->
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#FFBF00CA"/>
+                            <!-- Цвет при нажатии -->
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Background" Value="#272727"/>
+        <Setter Property="BorderBrush" Value ="Transparent"/>
+    </Style>
 </ResourceDictionary>
