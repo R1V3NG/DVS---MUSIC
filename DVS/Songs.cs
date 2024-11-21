@@ -8,13 +8,14 @@ namespace DVS
 {
     public class Songs
     {
-        string playlist {  get; set; }
-        string name { get; set; }
-
-        public Songs(string playlist, string name) 
+        public string playlist {  get; set; }
+        public string name { get; set; }
+        public string directory { get; set; }
+        public Songs(string playlist, string name, string directory) 
         {
             this.playlist = playlist;
             this.name = name;
+            this.directory = directory;
         }
     }
 }

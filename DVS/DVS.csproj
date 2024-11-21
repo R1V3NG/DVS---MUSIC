@@ -209,5 +209,8 @@
   <ItemGroup>
     <Resource Include="NoAlbums.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="PlaylistSquare.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

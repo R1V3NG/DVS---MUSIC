@@ -22,11 +22,16 @@ using System.Xml.Linq;
 using System.Collections.Generic;
 using TagLib.Mpeg;
 using System.Runtime.InteropServices.ComTypes;
+using MenuItem = System.Windows.Controls.MenuItem;
+using ContextMenu = System.Windows.Controls.ContextMenu;
+using Button = System.Windows.Controls.Button;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 namespace MediaPlayerApp
 {
     public partial class MainWindow : Window
     {
         private int currentTrackIndex = -1; // индекс песни в очереди
+        private int playlistTrackIndex = -1; // индекс песни в очереди
         private int MaxTrackIndex = 0;
         private bool isDragging = false; // если нет перемещения ползунка
         private bool VolumeisDragging = false;
@@ -34,21 +39,24 @@ namespace MediaPlayerApp
         private readonly DispatcherTimer timer = new DispatcherTimer();
         public static string activeUser;
         List<string> directories = new List<string>();
-        List<Playlist> playlists = new List<Playlist>();
-        List<Songs> songs = new List<Songs>();
         public static bool isWindowOpened = false;
 
-        public ObservableCollection<MusicFile> MusicQueue { get; set; } // список очереди
+        public ObservableCollection<MusicFile> MusicQueue { get; set; }// список очереди
+        public ObservableCollection<Songs> PlaylistQueue { get; set; } // Очередь для плейлистов
+        public ObservableCollection<Playlist> playlists { get; set; }
+        public ObservableCollection<Songs> songs { get; set; }
         public MainWindow()
         {
             InitializeComponent();
-            //MusicQueue = new ObservableCollection<MusicFile>();
             bPause.Focus();
             VolumeLevel.Content = Convert.ToString(VolumeSlider.Value*100);
             VolumeSlider.Value = VolumeSettings.LoadVolume(); // При инициализации вызываю метод класса, в котором вовзращаю сохраннённую громкость
             this.Closing += MainWindow_Closing;
             UpdateVolumeImage(); //Обновляем изображение громкости при инициализации
-            
+            CreatePlaylistButtons();
+            //System.Windows.MessageBox.Show(Convert.ToString(playlists.Count));
+            songs.Clear();
+
         }
         private void OpenFolder_Click(object sender, RoutedEventArgs e)
         {
@@ -82,7 +90,7 @@ namespace MediaPlayerApp
                     FileDirectory = System.IO.Path.GetDirectoryName(file)
                 };
                 MusicQueue.Add(music);
-                System.Windows.Controls.Button button = new System.Windows.Controls.Button
+                Button button = new Button
                 {
                     Content = GetAndSetInfoMusic(file),
                     Width = 1450,
@@ -98,6 +106,7 @@ namespace MediaPlayerApp
                     Tag = MaxTrackIndex
                 };
                 button.Click += MusicMouse;
+                button.MouseRightButtonDown += Button_MouseRightButtonDown;
                 MusicArea.Children.Add(button);
                 DbConnect(music.FileDirectory, music.Title, activeUser);
             }
@@ -112,7 +121,7 @@ namespace MediaPlayerApp
         // Нажатие на кнопку песни
         private void MusicMouse(object sender, RoutedEventArgs e)
         {
-            System.Windows.Controls.Button clickedButton = sender as System.Windows.Controls.Button;
+            Button clickedButton = sender as Button;
             int trackIndex = (int)clickedButton.Tag;
             currentTrackIndex = trackIndex;
             if (clickedButton != null)
@@ -121,6 +130,169 @@ namespace MediaPlayerApp
                 mediaElement.Play();
                 PlayImage.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
                 GetAndSetInfoMusic(MusicQueue[trackIndex].FilePath); // Воспроизводим музыку
+            }
+        }
+        private void Button_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Button clickedButton = sender as Button; // Получаем ссылку на нажатую кнопку
+            if (clickedButton != null)
+            {
+                string buttonText = clickedButton.Content.ToString(); // Получаем текст кнопки
+                CreateContextMenu(buttonText); // Передаем текст в метод создания контекстного меню
+            }
+        }
+        private void CreateContextMenu(string songName)
+        {
+            ContextMenu contextMenu = new ContextMenu();
+            { 
+                contextMenu.Style = (Style)FindResource("ContextMenuStyle");
+            }
+
+            // Добавляем пункт "Создать новый плейлист"
+            MenuItem createPlaylistItem = new MenuItem { Header = "Создать новый плейлист" };
+            createPlaylistItem.Click += (s,e) => OpenPlaylistPanel(); // Обработчик для создания нового плейлиста
+            contextMenu.Items.Add(createPlaylistItem);
+
+            // Добавляем пункт "Добавить в"
+            MenuItem addToItem = new MenuItem { Header = "Добавить в" };
+
+            foreach (var playlist in playlists)
+            {
+                MenuItem playlistItem = new MenuItem { Header = playlist.name };
+
+                // Обработчик клика для добавления песни в плейлист
+                playlistItem.Click += (s, e) =>
+                {
+                    // Выполняем добавление песни в плейлист только при выборе пункта меню
+                    AddSongIntoPlaylist(songName, playlist.name, songName);
+                };
+
+                addToItem.Items.Add(playlistItem);
+            }
+
+            contextMenu.Items.Add(addToItem);
+
+            // Открываем контекстное меню
+            contextMenu.IsOpen = true;
+        }
+        // создаю кнопки плейлистов
+        private void CreatePlaylistButtons()
+        {
+            PlaylistsArea.Children.Clear();
+            // Создаем кнопки для каждого плейлиста
+            foreach (var playlist in playlists)
+            {
+                // Создание кнопки
+                Button playlistButton = new Button
+                {
+                    Width = 150,
+                    Height = 200,
+                    Foreground = new SolidColorBrush(Colors.White),
+                    FontFamily = new FontFamily("Nunito"),
+                    FontSize = 16,
+                    Style = (Style)FindResource("PlaylistsButtonStyle"),
+                    Margin = new Thickness(20)
+                };
+
+                // Создание StackPanel для размещения изображения и текста
+                StackPanel stackPanel = new StackPanel
+                {
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+
+                // Создание Image
+                Image image = new Image
+                {
+                    Source = new BitmapImage(new Uri("/playlistSquare.png", UriKind.Relative)), // Убедитесь, что путь к изображению правильный
+                    Stretch = Stretch.Uniform, // Настройка растяжения изображения
+                    Width = 140, // Ширина изображения
+                    Height = 140 // Высота изображения
+                };
+
+                // Создание TextBlock для текста
+                TextBlock textBlock = new TextBlock
+                {
+                    Text = playlist.name,
+                    Foreground = new SolidColorBrush(Colors.White),
+                    FontFamily = new FontFamily("Nunito"),
+                    FontSize = 16,
+                    TextWrapping = TextWrapping.Wrap,
+                    TextTrimming = TextTrimming.CharacterEllipsis, // Обрезка текста с троеточием
+                    MaxWidth = 140, // Установка максимальной ширины для текста
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top, // Выравнивание текста вверху
+                    Margin = new Thickness(0, 10, 0, 0) // Отступ сверху
+                };
+
+                // Добавление элементов в StackPanel
+                stackPanel.Children.Add(image); // Добавляем изображение
+                stackPanel.Children.Add(textBlock); // Добавляем текст
+
+                // Установка содержимого кнопки
+                playlistButton.Content = stackPanel;
+                // Обработчик клика для кнопки плейлиста
+                playlistButton.Click += (s, e) =>
+                {
+                    // Здесь можно добавить логику для обработки клика по кнопке
+                    OpenPlaylist(playlist.name);
+                };
+
+                // Добавляем кнопку в контейнер
+                PlaylistsArea.Children.Add(playlistButton);
+            }
+        }
+        private void OpenPlaylist(string name)
+        {
+            PlaylistArea.Visibility = Visibility.Visible;
+            SongIntoPlaylist.Visibility = Visibility.Visible;
+            AddPlaylist.Visibility = Visibility.Collapsed;
+            PlaylistsArea.Visibility = Visibility.Collapsed;
+            SongIntoPlaylist.Children.Clear();
+            songs.Clear();
+            ReadSongsInPlaylist(name);
+            foreach (var song in songs)
+            {
+                Songs newSong = new Songs(name, song.name, song.directory); // Создаем новый объект Songs
+                PlaylistQueue.Add(newSong); // Добавляем в очередь плейлистов
+
+                Button button = new Button
+                {
+                    Content = song.name,
+                    Width = 1450,
+                    Height = 45,
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left,
+                    Margin = new Thickness(50, 5, 50, 10),
+                    Foreground = new SolidColorBrush(Colors.White),
+                    FontFamily = new FontFamily("Nunito"),
+                    FontSize = 16,
+                    Style = (Style)FindResource("SongButtonStyle"),
+                    Tag = PlaylistQueue.Count - 1 // Устанавливаем индекс трека
+                };
+                button.Click += PlaylistMusicMouse; // Обработчик клика по кнопке
+                SongIntoPlaylist.Children.Add(button);
+            }
+            if (PlaylistQueue.Count > 0)
+            {
+                playlistTrackIndex = 0; // Устанавливаем индекс на первый трек
+                GetAndSetInfoMusic(PlaylistQueue[playlistTrackIndex].directory + "\\" + PlaylistQueue[playlistTrackIndex].name + ".mp3"); // Воспроизводим музыку
+            }
+        }
+        // Нажатие на кнопку песни из плейлиста
+        private void PlaylistMusicMouse(object sender, RoutedEventArgs e)
+        {
+            Button clickedButton = sender as Button;
+            int trackIndex = (int)clickedButton.Tag; // Получаем индекс трека из Tag кнопки
+            playlistTrackIndex = trackIndex; // Обновляем текущий индекс
+
+            if (clickedButton != null)
+            {
+                isPaused = false;
+                mediaElement.Play();
+                PlayImage.Source = new BitmapImage(new Uri("/pause.png", UriKind.Relative));
+                GetAndSetInfoMusic(PlaylistQueue[trackIndex].directory + "\\" + PlaylistQueue[trackIndex].name + ".mp3");  // Воспроизводим музыку
             }
         }
         private void Pause()
@@ -448,13 +620,16 @@ namespace MediaPlayerApp
         //Меняю выделение и видимость панельки
         private void Library_Click(object sender, RoutedEventArgs e)
         {
+            AddPlaylist.Visibility = Visibility.Visible;
             SetButtonSelected(Library);
             if (PlaylistArea.Visibility == Visibility.Visible)
             {
+                SongIntoPlaylist.Visibility= Visibility.Collapsed;
+                PlaylistsArea.Visibility = Visibility.Collapsed;
                 PlaylistArea.Visibility = Visibility.Collapsed;
                 MusicPlaylist.Visibility = Visibility.Collapsed;
                 MusicArea.Visibility = Visibility.Visible;
-                LabelInfo.Visibility = Visibility.Visible;
+                //LabelInfo.Visibility = Visibility.Visible;
                 OpenFile.Visibility = Visibility.Visible;
             }
                 
@@ -462,18 +637,25 @@ namespace MediaPlayerApp
         // Переключаем на плейлисты, остальные элементы скрываем или показываем
         private void Playlists_Click(object sender, RoutedEventArgs e)
         {
+            AddPlaylist.Visibility = Visibility.Visible;
             SetButtonSelected(Playlists);
-            if (PlaylistArea.Visibility == Visibility.Collapsed)
+            if (PlaylistArea.Visibility == Visibility.Collapsed || SongIntoPlaylist.Visibility == Visibility)
             {
-                PlaylistArea.Visibility = Visibility.Visible;
-                MusicPlaylist.Visibility = Visibility.Visible;
-                MusicArea.Visibility = Visibility.Collapsed;
-                LabelInfo.Visibility = Visibility.Collapsed;
+                PlaylistsArea.Visibility = Visibility.Visible;
+                SongIntoPlaylist.Visibility = Visibility.Collapsed;
+                PlaylistArea.Visibility = Visibility.Visible; // Видимость верхнего Grida
+                MusicPlaylist.Visibility = Visibility.Visible; // Видимость панели с плейлистами
+                MusicArea.Visibility = Visibility.Collapsed; // Другие панельки мы скрываем
+                LabelInfo.Visibility = Visibility.Collapsed; // панелька с текстом (в разработке)
                 OpenFile.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+
             }
         }
         //Установка выделения
-        private void SetButtonSelected(System.Windows.Controls.Button selectedButton)
+        private void SetButtonSelected(Button selectedButton)
         {
             // Сбросить выделение для обеих кнопок
             ResetButtonSelection();
@@ -506,7 +688,9 @@ namespace MediaPlayerApp
         private void CreatePlaylistButton_Click(object sender, RoutedEventArgs e)
         {
             playlists.Add(new Playlist(tPlaylistName.Text, activeUser));
+            System.Windows.MessageBox.Show(Convert.ToString(playlists.Count));
             AddNewPlaylist(tPlaylistName.Text);
+            CreatePlaylistButtons();
             PlaylistName.Visibility = Visibility.Collapsed;
             tPlaylistName.Text = "Безымянный плейлист";
         }
@@ -516,6 +700,7 @@ namespace MediaPlayerApp
             if (PlaylistName.Visibility == Visibility.Visible)
             {
                 PlaylistName.Visibility = Visibility.Collapsed;
+                tPlaylistName.Text = "Безымянный плейлист";
             }
             else { PlaylistName.Visibility = Visibility.Visible; }
         }
@@ -559,6 +744,79 @@ namespace MediaPlayerApp
                 DownStrip.Background = Brushes.Transparent;
             }
         }
+        ///
+        /// Повторение кнопок
+        ///
+        private void CreatePlaylistButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            playlists.Add(new Playlist(tPlaylistName1.Text, activeUser));
+            AddNewPlaylist(tPlaylistName1.Text);
+            CreatePlaylistButtons();
+            tPlaylistName1.Text = "Безымянный плейлист";
+            BlackOverlay.Visibility = Visibility.Collapsed; // Скрываем затемнение
+            AddPlaylistPanel.Visibility = Visibility.Collapsed;
+        }
+        // Кнопка показывает и убирает панель с вводом данных
+        private void AddPlaylist_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (AddPlaylistPanel.Visibility == Visibility.Visible)
+            {
+                AddPlaylistPanel.Visibility = Visibility.Collapsed;
+            }
+            else { AddPlaylistPanel.Visibility = Visibility.Visible; }
+        }
+        //Очищаем textBox и убираем кнопку крестик
+        private void ClearButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            DownStrip1.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#C0C0C0"));
+            tPlaylistName1.Clear();
+            ClearButton1.Visibility = Visibility.Collapsed;
+        }
+        //Меняем действие с кнопкой при изменении данных
+        private void tPlaylistName_TextChanged_1(object sender, TextChangedEventArgs e)
+        {
+            if (ClearButton1 != null)
+            {
+                ClearButton1.Visibility = string.IsNullOrWhiteSpace(tPlaylistName1.Text) ? Visibility.Collapsed : Visibility.Visible;
+                if (ClearButton1.Visibility == Visibility.Visible)
+                {
+                    CreatePlaylistButton1.IsEnabled = true;
+                    CreatePlaylistButton1.Opacity = 1;
+                }
+                else
+                {
+                    CreatePlaylistButton1.IsEnabled = false;
+                    CreatePlaylistButton1.Opacity = 0.5;
+                }
+            }
+        }
+        // функция для изменения border DownStrip
+        private void tPlaylistName_PreviewMouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+            Border downStrip = (Border)VisualTreeHelper.GetParent(NameArea1);
+            while (downStrip != null && !(downStrip is Border))
+            {
+                downStrip = (Border)VisualTreeHelper.GetParent(downStrip);
+            }
+            if (downStrip != null)
+            {
+                downStrip.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D55CFF"));
+                DownStrip1.Background = Brushes.Transparent;
+            }
+        }
+
+        private void OpenPlaylistPanel()
+        {
+            BlackOverlay.Visibility = Visibility.Visible; // Показываем затемнение
+            AddPlaylistPanel.Visibility = Visibility.Visible; // Показываем панель
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            BlackOverlay.Visibility = Visibility.Collapsed; // Скрываем затемнение
+            AddPlaylistPanel.Visibility = Visibility.Collapsed; // Скрываем панель
+            tPlaylistName1.Text = "Безымянный плейлист";
+        }
         void DbConnect(string path, string name, string user)
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
@@ -597,9 +855,14 @@ namespace MediaPlayerApp
         private void Window_Initialized(object sender, EventArgs e)
         {
             isWindowOpened = true;
+            playlists = new ObservableCollection<Playlist>();
+            MusicQueue = new ObservableCollection<MusicFile>();
+            PlaylistQueue = new ObservableCollection<Songs>();
+            songs = new ObservableCollection<Songs>();
             DbInit();
             ReadPlaylists();
-            MusicQueue = new ObservableCollection<MusicFile>();
+
+            
             if (directories.Count > 0 && directories != null)
             {
                 foreach (var directory in directories)
@@ -666,7 +929,7 @@ namespace MediaPlayerApp
 
                 SqliteCommand command = new SqliteCommand();
                 command.Connection = connection;
-                command.CommandText= "SELECT name FROM playlists WHERE user_id=(SELECT id FROM users WHERE name=@user)";
+                command.CommandText= "SELECT name FROM playlists WHERE user_id=(SELECT id FROM users WHERE login=@user)";
                 command.Parameters.AddWithValue("@user", activeUser);
 
                 using (var reader = command.ExecuteReader())
@@ -682,7 +945,7 @@ namespace MediaPlayerApp
             }
         }
 
-        void AddSongIntoPlaylist(string songName, string playlistName)
+        void AddSongIntoPlaylist(string songName, string playlistName, string directory)
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
             using (var connection = new SqliteConnection(connectionString))
@@ -696,9 +959,11 @@ namespace MediaPlayerApp
                 command.Parameters.AddWithValue("@playlistName", playlistName);
                 command.Parameters.AddWithValue("@user", activeUser);
 
-                command.CommandText = "INSERT INTO `music-playlists` (number_in_playlist, music_id, playlist_id) SELECT (SELECT COUNT(*) + 1 FROM `music-playlists` JOIN playlists ON `music-playlists`.playlist_id=playlists.id WHERE playlists.name=@playlistName AND user_id=(SELECT id FROM users WHERE login=@user)), (SELECT id FROM music WHERE name=@songName), (SELECT id FROM playlists WHERE name=@playlistName)";
+                command.CommandText = "INSERT INTO `music-playlists` (number_in_playlist, music_id, playlist_id) SELECT (SELECT COUNT(*) + 1 FROM `music-playlists` JOIN playlists ON `music-playlists`.playlist_id=playlists.id WHERE playlists.name=@playlistName AND user_id=(SELECT id FROM users WHERE login=@user)), (SELECT music.id FROM music JOIN music_names ON music.name_id = music_names.id WHERE name=@songName), (SELECT id FROM playlists WHERE name=@playlistName)";
                 command.ExecuteNonQuery();
             }
+            songs.Clear();
+            ReadSongsInPlaylist(playlistName);
         }
 
         void ReadSongsInPlaylist(string playlistName)
@@ -711,7 +976,7 @@ namespace MediaPlayerApp
 
                 SqliteCommand command = new SqliteCommand();
                 command.Connection = connection;
-                command.CommandText = "SELECT  playlists.name, music_names.name FROM playlists JOIN `music-playlists` ON playlists.id = `music-playlists`.playlist_id JOIN music ON `music-playlists`.music_id = music.id JOIN music_names ON music.name_id = music_names.id WHERE playlists.name = @playlistName AND playlists.user_id = (SELECT id FROM users WHERE login=@user) ORDER BY `music-playlists`.number_in_playlist";
+                command.CommandText = "SELECT playlists.name, music_names.name, directories.directory FROM playlists JOIN `music-playlists` ON playlists.id = `music-playlists`.playlist_id JOIN music ON `music-playlists`.music_id = music.id JOIN music_names ON music.name_id = music_names.id JOIN directories ON music.directory_id = directories.id WHERE playlists.name = @playlistName AND playlists.user_id = (SELECT id FROM users WHERE login=@user) ORDER BY `music-playlists`.number_in_playlist";
                 command.Parameters.AddWithValue("@user", activeUser);
                 command.Parameters.AddWithValue("@playlistName", playlistName);
 
@@ -721,7 +986,7 @@ namespace MediaPlayerApp
                     {
                         while (reader.Read())
                         {
-                            songs.Add(new Songs(reader.GetString(0), reader.GetString(1)));
+                            songs.Add(new Songs(reader.GetString(0), reader.GetString(1), reader.GetString(2)));
                         }
                     }
                 }

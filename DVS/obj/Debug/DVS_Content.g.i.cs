@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("noalbums.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("playlistsquare.png")]
 
 

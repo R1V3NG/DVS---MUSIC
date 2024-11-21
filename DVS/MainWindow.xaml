@@ -85,23 +85,68 @@
         <!--скролл полностью-->
         <StackPanel Grid.Row="1" Grid.Column="1">
             <ScrollViewer x:Name="scroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanContentScroll="True" Focusable="False" Height="750">
-                <StackPanel x:Name="MusicArea" Background="#1E1E1E" Grid.Row="1" Grid.Column="1"/>
+                <StackPanel x:Name="MusicArea" Grid.Row="1" Grid.Column="1"/>
             </ScrollViewer>
+        </StackPanel>
+        <Grid x:Name="BlackOverlay" Background="Black" Opacity="0.5" Visibility="Collapsed" Grid.RowSpan="3" Grid.ColumnSpan="2" />
+        <StackPanel x:Name="AddPlaylistPanel"  Grid.Row="1" Grid.Column="1" Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Border Height="400" Width="500" HorizontalAlignment="Center" Margin="0,0,0,0" CornerRadius="5" BorderBrush="Black" BorderThickness="1,1,1,1" Background="#FF2C2C2C">
+                <StackPanel Height="395" Width="495" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#2C2C2C">
+                    <Label Content="Создать новый плейлист" FontSize="24" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" Margin="0,25,0,0" />
+                    <Border Height="150" Width="150" CornerRadius="15" BorderThickness="1,1,1,1" BorderBrush="#FF3F3F3F" Background="#1C1C1C">
+                        <StackPanel Width="100" Height="100">
+                            <Image Source="/PlaylistSquare.png" Stretch="Uniform" Height="100"/>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="DownStrip1" Width="Auto" Background="#1E1E1E" Height="50" HorizontalAlignment="Center" Margin="10,10,10,10" CornerRadius="5" BorderThickness="0,0,0,2" Visibility="Visible" BorderBrush="Silver">
+                        <StackPanel x:Name="NameArea1" Orientation="Horizontal" Width="Auto" Height="50" Background="Transparent">
+                            <TextBox x:Name="tPlaylistName1" Margin="2,0,0,0" Foreground="White" Background="#1E1E1E" 
+ Text="Безымянный плейлист" Height="46" TextChanged="tPlaylistName_TextChanged_1" 
+ PreviewMouseDown="tPlaylistName_PreviewMouseDown_1" BorderThickness="0,0,0,0" 
+ VerticalContentAlignment="Center" CaretBrush="White" FontSize="16" MinWidth="250" MaxWidth="250"/>
+                            <Button x:Name="ClearButton1" Style="{StaticResource NoHighlightButtonStyle}" Content="✕" Width="50" Height="50" Visibility="Visible" Click="ClearButton_Click_1" Background="#1E1E1E" BorderBrush="Transparent" Foreground="Gray" HorizontalContentAlignment="Center" FontSize="20"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Height="70" Margin="0,40,0,0" CornerRadius="5" Visibility="Visible" Background="#202020" Width="495">
+                        <StackPanel Height="70" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button x:Name="CreatePlaylistButton1" 
+                        Content="Создать" 
+                        Height="35" 
+                        FontSize="16"
+                        Width="200" 
+                        Click="CreatePlaylistButton_Click_1" 
+                        Background="#D55CFF"
+                        Style="{StaticResource PlaylistButtonStyle}" Foreground="Black"/>
+                            <Button x:Name="Cancel" 
+                        Content="Отмена" 
+                        Height="35" 
+                        FontSize="16"
+                        Width="200"
+                        Margin="40,0,0,0" 
+                        Click="CancelButton_Click" 
+                        Background="#2D2D2D"
+                        Style="{StaticResource RoundButtonStyle}" Foreground="White"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
         </StackPanel>
         <!--Область где высвечивается плейлист и MusicPlaylist - песни из плейлиста-->
         <StackPanel x:Name="PlaylistArea" Grid.Row="0" Grid.Column="1" Visibility="Collapsed">
             <Button x:Name="AddPlaylist" Focusable="False" Content="Создать новый плейлист" Style="{StaticResource PlaylistButtonStyle}" Width="350" Foreground="Black" Background="#D55CFF" FontSize="24" Margin="100,115,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="AddPlaylist_Click"/>
         </StackPanel>
+        <StackPanel x:Name="SongIntoPlaylist" Grid.Row="1" Grid.Column="1" Visibility="Collapsed" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        <StackPanel x:Name="PlaylistsArea" Grid.Row="1" Grid.Column="1" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Horizontal"/>
         <StackPanel x:Name="MusicPlaylist" Grid.Row="1" Grid.Column="1" Visibility="Collapsed">
             <Border x:Name="PlaylistName" Height="220" Width="300" HorizontalAlignment="Left" Margin="125,0,0,0" CornerRadius="5" Visibility="Collapsed" BorderBrush="Black" BorderThickness="1,1,1,1" Background="#FF2C2C2C">
                 <StackPanel Height="200" Width="300" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#2c2c2c">
-                    <Border x:Name="DownStrip" Width="Auto" Background="#FF212020" Height="50" HorizontalAlignment="Center" Margin="10,45,10,10" CornerRadius="5" BorderThickness="0,0,0,2" Visibility="Visible" BorderBrush="Silver">
+                    <Border x:Name="DownStrip" Width="Auto" Background="#1E1E1E" Height="50" HorizontalAlignment="Center" Margin="10,45,10,10" CornerRadius="5" BorderThickness="0,0,0,2" Visibility="Visible" BorderBrush="Silver">
                         <StackPanel x:Name="NameArea" Orientation="Horizontal" Width="Auto" Height="50" Background="Transparent">
                             <TextBox x:Name="tPlaylistName" Margin="2,0,0,0" Foreground="White" Background="#1E1E1E" 
                          Text="Безымянный плейлист" Width="225" Height="Auto" FontSize="18" TextChanged="tPlaylistName_TextChanged" 
                          PreviewMouseDown="tPlaylistName_PreviewMouseDown" BorderThickness="0,0,0,0" 
-                         VerticalContentAlignment="Center" CaretBrush="White"/>
-                            <Button x:Name="ClearButton" Style="{StaticResource NoHighlightButtonStyle}" FontSize="20" Content="✕" Width="50" Height="50" Visibility="Visible" Click="ClearButton_Click" Background="Transparent" BorderBrush="Transparent" Foreground="Gray" HorizontalContentAlignment="Center"/>
+                         VerticalContentAlignment="Center" CaretBrush="White" MaxWidth="225" MinWidth="225"/>
+                            <Button x:Name="ClearButton" Style="{StaticResource NoHighlightButtonStyle}" FontSize="20" Content="✕" Width="50" Height="50" Visibility="Visible" Click="ClearButton_Click" Background="#1E1E1E" BorderBrush="Transparent" Foreground="Gray" HorizontalContentAlignment="Center"/>
                         </StackPanel>
                     </Border>
                     <Button x:Name="CreatePlaylistButton" 
