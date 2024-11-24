@@ -235,39 +235,24 @@
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="Padding" Value="0"/>
-        <!-- Убираем отступы -->
         <Setter Property="Margin" Value="0"/>
-        <!-- Убираем поля -->
 
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="MenuItem">
                     <Setter Property="Padding" Value="10,5"/>
-                    <!-- Устанавливаем отступы для элементов меню -->
                     <Setter Property="Background" Value="#FF3F3F3F"/>
-                    <!-- Фон по умолчанию -->
                     <Setter Property="Foreground" Value="White"/>
-                    <!-- Цвет текста по умолчанию -->
                     <Setter Property="BorderThickness" Value="0"/>
-                    <!-- Убираем границы элементов -->
 
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="#323232"/>
-                            <!-- Цвет фона при наведении -->
                             <Setter Property="Foreground" Value="Black"/>
-                            <!-- Цвет текста при наведении -->
                         </Trigger>
                     </Style.Triggers>
                 </Style>
             </Setter.Value>
         </Setter>
-
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="Gray"/>
-                <!-- Цвет фона при наведении на ContextMenu -->
-            </Trigger>
-        </Style.Triggers>
     </Style>
 </ResourceDictionary>

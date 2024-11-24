@@ -65,7 +65,7 @@
                     </StackPanel>
                 </Grid>
             </Button>
-            <Button x:Name="VolumeButton" Click="VolumeButton_Click" Style="{StaticResource NoHighlightButtonStyle}" Height="25" Width="25"  Margin="1220,-60,0,0" Grid.Row="2" Focusable="False">
+            <Button x:Name="VolumeButton" Click="VolumeButton_Click" Style="{StaticResource NoHighlightButtonStyle}" Height="50" Width="50"  Margin="1220,-60,0,0" Grid.Row="2" Focusable="False">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="25" Width="25" >
                     <Image x:Name="ImageVolume" Margin="2.5,0,0,0"  Stretch="Uniform" Height="20" Width="20"
                            ToolTip="Звук" 
