@@ -1,0 +1,222 @@
+﻿<Window x:Class="MediaPlayerApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DVS" Height="1080" Width="1920" WindowState="Maximized" WindowStartupLocation="CenterScreen" Background="#1E1E1E" Initialized="Window_Initialized" Closing="MainWindow_Closing" Loaded="Window_Loaded">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="DictionaryButton.xaml"/>
+                <!-- Подключаем словарь ресурсов -->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Background="Transparent" ShowGridLines="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="750"/>
+            <RowDefinition Height="150*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="1500*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Background="#272727" Grid.Row="0"/>
+        <StackPanel Background="#272727" Grid.Row="1">
+            <Button x:Name="Library" Click="Library_Click" Style="{StaticResource OverlayButtonStyle}" Height="60" Width="340" Focusable="False">
+                <Grid Width="340" Height="60">
+                    <!-- Оверлей, который занимает всю область кнопки -->
+                    <Rectangle x:Name="LibraryOverlay" Fill="Transparent" Opacity="0.15" Visibility="Hidden" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="/Library.png" Stretch="Uniform" Height="50" Margin="20,0,40,0" />
+                        <TextBlock VerticalAlignment="Center" FontSize="36" Foreground="White"><Run Text="Библиотека"/></TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
+            <Button x:Name="Playlists" Click="Playlists_Click" Style="{StaticResource OverlayButtonStyle}" Height="60" Width="340" Focusable="False" Margin="0,5,0,0">
+                <Grid Width="340" Height="60">
+                    <!-- Оверлей, который занимает всю область кнопки -->
+                    <Rectangle x:Name="Overlay" Fill="Transparent" Opacity="0.15" Visibility="Hidden" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="/Playlist.png" Stretch="Uniform" Height="50" Margin="10,0,40,0" />
+                        <TextBlock VerticalAlignment="Center" FontSize="36" Foreground="White"><Run Text="Плейлисты"/></TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
+        </StackPanel>
+        <StackPanel Background="#272728" Grid.Row="2" Grid.Column="1">
+            <Button x:Name="TagButton" Style="{StaticResource NoHighlightButtonStyle}" Background="Transparent" Height="70" Width="790" HorizontalAlignment="Stretch" Margin="0,40,800,0" BorderThickness="0,0,0,0" Focusable="False">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <!-- Для изображения -->
+                        <ColumnDefinition Width="*"/>
+                        <!-- Для текстов -->
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Изображение слева -->
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                        <Image x:Name="AlbumImage" Source="/NoAlbums.png" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,10,0"/>
+                    </StackPanel>
+                    <!-- Вертикальный StackPanel для текстов справа от изображения -->
+                    <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                        <TextBlock x:Name="trackTitle" Text="" FontFamily="Nunito" FontSize="18" Background="Transparent" Foreground="White" Height="30" Width="690"/>
+                        <TextBlock x:Name="trackMusician" Text="" FontFamily="Nunito" FontSize="16" Background="Transparent" Foreground="White" Height="26" Width="690"/>
+                    </StackPanel>
+                </Grid>
+            </Button>
+            <Button x:Name="VolumeButton" Click="VolumeButton_Click" Style="{StaticResource NoHighlightButtonStyle}" Height="50" Width="50"  Margin="1300,-65,0,0" Grid.Row="2" Focusable="False" Visibility="Visible">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="35" Width="35" >
+                    <Image x:Name="ImageVolume" Margin="0,0,0,0"  Stretch="Uniform" Height="35" Width="35"
+                           ToolTip="Звук" 
+               ToolTipService.Placement="Mouse" 
+               ToolTipService.HorizontalOffset="10" 
+               ToolTipService.VerticalOffset="10"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <StackPanel Background="#272728" Grid.Row="2" Grid.Column="0"/>
+        <StackPanel x:Name="LabelInfo" Grid.Row="0" Grid.Column="1"/>
+        <Slider x:Name ="sMusic" Grid.Row="2"  Margin="85,7,85,0" 
+                ValueChanged="sMusic_ValueChanged" Grid.ColumnSpan="2" VerticalAlignment="Top" 
+                IsMoveToPointEnabled="True" Thumb.DragStarted="sMusic_DragStarted" 
+                Thumb.DragCompleted="sMusic_DragCompleted" 
+                MouseMove="sMusic_MouseMove" PreviewMouseUp="sMusic_PreviewMouseUp" Focusable="False" />
+        <!--скролл полностью-->
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <ScrollViewer x:Name="scroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanContentScroll="True" Focusable="False" Height="750">
+                <StackPanel x:Name="MusicArea" Grid.Row="1" Grid.Column="1"/>
+            </ScrollViewer>
+        </StackPanel>
+        <Grid x:Name="BlackOverlay" Background="Black" Opacity="0.5" Visibility="Collapsed" Grid.RowSpan="3" Grid.ColumnSpan="2" />
+        <StackPanel x:Name="AddPlaylistPanel"  Grid.Row="1" Grid.Column="1" Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Border Height="400" Width="500" HorizontalAlignment="Center" Margin="0,0,0,0" CornerRadius="5" BorderBrush="Black" BorderThickness="1,1,1,1" Background="#FF2C2C2C">
+                <StackPanel Height="395" Width="495" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#2C2C2C">
+                    <Label Content="Создать новый плейлист" FontSize="24" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" Margin="0,25,0,0" />
+                    <Border Height="150" Width="150" CornerRadius="15" BorderThickness="1,1,1,1" BorderBrush="#FF3F3F3F" Background="#1C1C1C">
+                        <StackPanel Width="100" Height="100">
+                            <Image Source="/PlaylistSquare.png" Stretch="Uniform" Height="100"/>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="DownStrip1" Width="Auto" Background="#1E1E1E" Height="50" HorizontalAlignment="Center" Margin="10,10,10,10" CornerRadius="5" BorderThickness="0,0,0,2" Visibility="Visible" BorderBrush="Silver">
+                        <StackPanel x:Name="NameArea1" Orientation="Horizontal" Width="Auto" Height="50" Background="Transparent">
+                            <TextBox x:Name="tPlaylistName1" Margin="2,0,0,0" Foreground="White" Background="#1E1E1E" 
+ Text="Безымянный плейлист" Height="46" TextChanged="tPlaylistName_TextChanged_1" 
+ PreviewMouseDown="tPlaylistName_PreviewMouseDown_1" BorderThickness="0,0,0,0" 
+ VerticalContentAlignment="Center" CaretBrush="White" FontSize="16" MinWidth="250" MaxWidth="250"/>
+                            <Button x:Name="ClearButton1" Style="{StaticResource NoHighlightButtonStyle}" Content="✕" Width="50" Height="50" Visibility="Visible" Click="ClearButton_Click_1" Background="#1E1E1E" BorderBrush="Transparent" Foreground="Gray" HorizontalContentAlignment="Center" FontSize="20"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Height="70" Margin="0,40,0,0" CornerRadius="5" Visibility="Visible" Background="#202020" Width="495">
+                        <StackPanel Height="70" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button x:Name="CreatePlaylistButton1" 
+                        Content="Создать" 
+                        Height="35" 
+                        FontSize="16"
+                        Width="200" 
+                        Click="CreatePlaylistButton_Click_1" 
+                        Background="#D55CFF"
+                        Style="{StaticResource PlaylistButtonStyle}" Foreground="Black"/>
+                            <Button x:Name="Cancel" 
+                        Content="Отмена" 
+                        Height="35" 
+                        FontSize="16"
+                        Width="200"
+                        Margin="40,0,0,0" 
+                        Click="CancelButton_Click" 
+                        Background="#2D2D2D"
+                        Style="{StaticResource RoundButtonStyle}" Foreground="White"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        <!--Область где высвечивается плейлист и MusicPlaylist - песни из плейлиста-->
+        <StackPanel x:Name="PlaylistArea" Grid.Row="0" Grid.Column="1" Visibility="Collapsed">
+            <Button x:Name="AddPlaylist" Focusable="False" Content="Создать новый плейлист" Style="{StaticResource PlaylistButtonStyle}" Width="350" Foreground="Black" Background="#D55CFF" FontSize="24" Margin="100,115,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="AddPlaylist_Click"/>
+        </StackPanel>
+        <StackPanel x:Name="SongIntoPlaylist" Grid.Row="1" Grid.Column="1" Visibility="Collapsed" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        <StackPanel x:Name="PlaylistsArea" Grid.Row="1" Grid.Column="1" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Horizontal"/>
+        <StackPanel x:Name="MusicPlaylist" Grid.Row="1" Grid.Column="1" Visibility="Collapsed">
+            <Border x:Name="PlaylistName" Height="220" Width="300" HorizontalAlignment="Left" Margin="125,0,0,0" CornerRadius="5" Visibility="Collapsed" BorderBrush="Black" BorderThickness="1,1,1,1" Background="#FF2C2C2C">
+                <StackPanel Height="200" Width="300" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#2c2c2c">
+                    <Border x:Name="DownStrip" Width="Auto" Background="#1E1E1E" Height="50" HorizontalAlignment="Center" Margin="10,45,10,10" CornerRadius="5" BorderThickness="0,0,0,2" Visibility="Visible" BorderBrush="Silver">
+                        <StackPanel x:Name="NameArea" Orientation="Horizontal" Width="Auto" Height="50" Background="Transparent">
+                            <TextBox x:Name="tPlaylistName" Margin="2,0,0,0" Foreground="White" Background="#1E1E1E" 
+                         Text="Безымянный плейлист" Width="225" Height="Auto" FontSize="18" TextChanged="tPlaylistName_TextChanged" 
+                         PreviewMouseDown="tPlaylistName_PreviewMouseDown" BorderThickness="0,0,0,0" 
+                         VerticalContentAlignment="Center" CaretBrush="White" MaxWidth="225" MinWidth="225"/>
+                            <Button x:Name="ClearButton" Style="{StaticResource NoHighlightButtonStyle}" FontSize="20" Content="✕" Width="50" Height="50" Visibility="Visible" Click="ClearButton_Click" Background="#1E1E1E" BorderBrush="Transparent" Foreground="Gray" HorizontalContentAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <Button x:Name="CreatePlaylistButton" 
+            Content="Создать плейлист" 
+            Height="35" 
+            FontSize="20"
+            Width="200"
+            Margin="0,20,0,0" 
+            Click="CreatePlaylistButton_Click" 
+            Background="#D55CFF"
+            Style="{StaticResource PlaylistButtonStyle}" Foreground="Black"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        <!--Правая верхняя область, кроме открытия файла-->
+
+        <MediaElement x:Name="mediaElement" MediaElement.MediaEnded="MediaElement_MediaEnded" Width="0" Height="0" LoadedBehavior="Manual" Margin="275,488,1175,322" />
+        <Label x:Name ="lEnd" Grid.Column="1"  HorizontalAlignment="Right" Margin="0,8,10,0" VerticalAlignment="Top" Foreground="White" FontSize="16" Grid.Row="2"/>
+        <Label  Name ="lStart" Content="00:00:00" HorizontalAlignment="Left" Margin="6,8,0,0" VerticalAlignment="Top" FontSize="16" Foreground="White" Grid.Row="2"/>
+        <StackPanel x:Name="VolumeArea" Grid.Row="2" Grid.ColumnSpan="2" Visibility="Hidden">
+            <Border Margin="1600,-5,0,0"  Width="300" Height="60" CornerRadius="5" Background="#2C2C2C" BorderThickness="0.5,0.5,0.5,0.5" Visibility="Visible" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" BorderBrush="Black" >
+                <StackPanel Height="35" Width="300" Background="Transparent" HorizontalAlignment="Center">
+                    <Slider x:Name="VolumeSlider" Minimum="0" Maximum="1" Value="0.5" 
+        TickFrequency="0.01" IsSnapToTickEnabled="True"
+        Width="220" Height="30" Margin="0,5,0,0"
+        ValueChanged="VolumeSlider_ValueChanged" Focusable="False" 
+                MouseMove="VolumeSlider_MouseMove" PreviewMouseUp="VolumeSlider_PreviewMouseUp" RenderTransformOrigin="0.5,0.5" IsMoveToPointEnabled="True">
+                        <Slider.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform AngleX="0.462"/>
+                                <RotateTransform/>
+                                <TranslateTransform X="0.242"/>
+                            </TransformGroup>
+                        </Slider.RenderTransform>
+                    </Slider>
+                    <Label x:Name="VolumeLevel"  Height="35" Width="35" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="255,-35,2.5,0" FontSize="14" Foreground="White" HorizontalContentAlignment="Center"/>
+                    <Image x:Name="ImageVolumeLevel" Height="20" Width="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-35,260,0"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        <!-- Кнопка открытия файла со стилем -->
+        <Button x:Name="OpenFile" Style="{StaticResource RoundButtonStyle}" Width="165" Click="OpenFolder_Click" FontSize="16" Grid.Column="1" Grid.Row="0" Margin="1310,50,95,50" >
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="150" >
+                <TextBlock VerticalAlignment="Center" Foreground="White">Открыть папку</TextBlock>
+                <Image Source="/files.png" Stretch="Uniform" Height="25" VerticalAlignment="Center" Margin="10,0,0,0" />
+            </StackPanel>
+        </Button>
+        <!-- Кнопка play|pause со стилем -->
+        <Button x:Name="bPause" Click="Pause_Click"  Style="{StaticResource NoHighlightButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="145,55,0,0" Grid.Row="2" PreviewKeyDown="bPause_PreviewKeyDown" PreviewKeyUp="bPause_PreviewKeyUp">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Height="38" Width="38" >
+                <Image x:Name="PlayImage" Source="/play.png" Stretch="Uniform" Height="34" Width="38"/>
+            </StackPanel>
+        </Button>
+
+        <Button x:Name="bBack" Click ="BackButton_Click" Style="{StaticResource NoHighlightButtonStyle}" Focusable="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,60,0,0" Grid.Row="2" Height="30" Width="30">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2">
+                <Image x:Name="BackImage" Source="/back.png" Stretch="Uniform" Height="25"/>
+            </StackPanel>
+        </Button>
+
+        <Button x:Name="bNext" Click="NextButton_Click" Style="{StaticResource NoHighlightButtonStyle}" Focusable="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="195,60,0,0" Grid.Row="2" Height="30" Width="30">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" >
+                <Image x:Name="ForwardImage" Source="/forward.png" Height="25"/>
+            </StackPanel>
+        </Button>
+        <Button x:Name="bProfile" Click="RegistrationButton_Click" Style="{StaticResource NoHighlightButtonStyle}" Focusable="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="280,680,0,0" Height="60" Width="60" Grid.Row="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
+                <Image x:Name="ProfileImage" Source="/profile.png" Height="50"/>
+            </StackPanel>
+        </Button>
+    </Grid>
+</Window>
