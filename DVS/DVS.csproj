@@ -212,5 +212,11 @@
   <ItemGroup>
     <Resource Include="PlaylistSquare.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Repeat.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DVS.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

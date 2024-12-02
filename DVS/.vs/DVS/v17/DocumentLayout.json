@@ -1,49 +1,49 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\",
+  "WorkspaceRootPath": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|c:\\users\\\u043F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\dvs---music-sergei\\dvs\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|c:\\users\\\u043F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\dvs\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\songs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:songs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\loginwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\loginwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:loginwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\dictionarybutton.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\dictionarybutton.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:dictionarybutton.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\musicfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\songs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:songs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\musicfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:musicfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\playlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\playlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:playlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\loginwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\loginwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:loginwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\registerwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\registerwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:registerwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\volumesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\volumesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:volumesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{6891C0ED-767B-4A6E-8FE9-6A3E656AE0B9}|DVS.csproj|solutionrelative:app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
@@ -54,7 +54,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -62,33 +62,48 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "DictionaryButton.xaml",
-              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\DictionaryButton.xaml",
+              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\DictionaryButton.xaml",
               "RelativeDocumentMoniker": "DictionaryButton.xaml",
-              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\DictionaryButton.xaml",
+              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\DictionaryButton.xaml",
               "RelativeToolTip": "DictionaryButton.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-11-18T13:58:18.656Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "MainWindow.xaml",
-              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\MainWindow.xaml",
-              "RelativeToolTip": "MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-10-23T09:46:13.542Z"
+              "WhenOpened": "2024-11-18T13:58:18.656Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "MainWindow.xaml",
+              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-10-23T09:46:13.542Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AQIAACgAAAAAAAAAAAAQwPcCAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-22T14:45:13.036Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "Songs.cs",
-              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\Songs.cs",
+              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\Songs.cs",
               "RelativeDocumentMoniker": "Songs.cs",
-              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\Songs.cs",
+              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\Songs.cs",
               "RelativeToolTip": "Songs.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -97,24 +112,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\MainWindow.xaml.cs",
-              "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AQIAAOkAAAAAAAAAAAAuwOwAAAAUAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-22T14:45:13.036Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 5,
               "Title": "MusicFile.cs",
-              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\MusicFile.cs",
+              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\MusicFile.cs",
               "RelativeDocumentMoniker": "MusicFile.cs",
-              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\MusicFile.cs",
+              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\MusicFile.cs",
               "RelativeToolTip": "MusicFile.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -124,9 +126,9 @@
               "$type": "Document",
               "DocumentIndex": 6,
               "Title": "Playlist.cs",
-              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\Playlist.cs",
+              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\Playlist.cs",
               "RelativeDocumentMoniker": "Playlist.cs",
-              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\Playlist.cs",
+              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\Playlist.cs",
               "RelativeToolTip": "Playlist.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -136,20 +138,21 @@
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "LoginWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\LoginWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\LoginWindow.xaml",
               "RelativeDocumentMoniker": "LoginWindow.xaml",
-              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\LoginWindow.xaml",
+              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\LoginWindow.xaml",
               "RelativeToolTip": "LoginWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-11-06T10:19:28.771Z"
+              "WhenOpened": "2024-11-06T10:19:28.771Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
               "Title": "RegisterWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\RegisterWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\RegisterWindow.xaml.cs",
               "RelativeDocumentMoniker": "RegisterWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\RegisterWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\RegisterWindow.xaml.cs",
               "RelativeToolTip": "RegisterWindow.xaml.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAJkAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -157,23 +160,24 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "LoginWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\LoginWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\LoginWindow.xaml.cs",
               "RelativeDocumentMoniker": "LoginWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\LoginWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\LoginWindow.xaml.cs",
               "RelativeToolTip": "LoginWindow.xaml.cs",
-              "ViewState": "AQIAAFAAAAAAAAAAAAAowHAAAAANAAAA",
+              "ViewState": "AQIAAB8AAAAAAAAAAAAgwC8AAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-06T10:25:54.221Z"
+              "WhenOpened": "2024-11-06T10:25:54.221Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
               "Title": "VolumeSettings.cs",
-              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\VolumeSettings.cs",
+              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\VolumeSettings.cs",
               "RelativeDocumentMoniker": "VolumeSettings.cs",
-              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\VolumeSettings.cs",
+              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\VolumeSettings.cs",
               "RelativeToolTip": "VolumeSettings.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABwAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -183,12 +187,13 @@
               "$type": "Document",
               "DocumentIndex": 10,
               "Title": "App.xaml",
-              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\App.xaml",
+              "DocumentMoniker": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\App.xaml",
               "RelativeDocumentMoniker": "App.xaml",
-              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS---MUSIC-Sergei\\DVS\\App.xaml",
+              "ToolTip": "C:\\Users\\\u041F\u0440\u0438\u0432\u0435\u0442\\source\\repos\\DVS\\App.xaml",
               "RelativeToolTip": "App.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-11-06T10:44:42.561Z"
+              "WhenOpened": "2024-11-06T10:44:42.561Z",
+              "EditorCaption": ""
             }
           ]
         }

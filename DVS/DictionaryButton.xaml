@@ -255,4 +255,18 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="RepeatButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Cursor" Value="Hand"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#454545"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="#393939"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

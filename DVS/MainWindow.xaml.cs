@@ -41,12 +41,13 @@ namespace MediaPlayerApp
         private bool isDragging = false; // если нет перемещения ползунка
         private bool VolumeisDragging = false;
         private bool isPaused = true; // если нет паузы
-        private readonly DispatcherTimer timer = new DispatcherTimer();
+        private bool isRepeat = false; // если нет повтора
+        public static bool isWindowOpened = false;
+        private bool isDraggingButton = false;
         public static string activeUser;
         string author;
         List<string> directories = new List<string>();
-        public static bool isWindowOpened = false;
-        private bool isDraggingButton = false;
+        private readonly DispatcherTimer timer = new DispatcherTimer();
         private Button draggedButton = null;
         private Point mouseDownPosition;
 
@@ -143,6 +144,26 @@ namespace MediaPlayerApp
             {
                 string buttonText = clickedButton.Content.ToString(); // Получаем текст кнопки
                 CreateContextMenu(buttonText, (int)clickedButton.Tag); // Передаем текст в метод создания контекстного меню
+            }
+        }
+        private void RepeatButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+
+            // Переключаем состояние повтора
+            if (button.Tag == null || (bool)button.Tag == false)
+            {
+                // Включаем повтор
+                button.Tag = true;
+                isRepeat = true;
+                button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#454545")); // Подсветка включена
+            }
+            else
+            {
+                // Выключаем повтор
+                button.Tag = false;
+                isRepeat = false;
+                button.Background = Brushes.Transparent; // Сбрасываем подсветку
             }
         }
         private void CreateContextMenu(string songName, int playlistTrackIndex)
@@ -399,28 +420,6 @@ namespace MediaPlayerApp
             UpdatePlaylistDB();
         }
 
-        private void UpdatePlaylistDB()
-        {
-            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
-            using (var connection = new SqliteConnection(connectionString))
-            {
-                connection.Open();
-
-                foreach (var song in songs)
-                {
-                    SqliteCommand command = new SqliteCommand();
-                    command.Connection = connection;
-
-                    command.CommandText = "UPDATE `music-playlists` SET number_in_playlist=@num WHERE music_id = (SELECT music.id FROM music JOIN music_names ON music.name_id = music_names.id WHERE music_names.name=@name) AND playlist_id = (SELECT id FROM playlists WHERE name=@playlist AND user_id = (SELECT id FROM users WHERE login=@user))";
-                    command.Parameters.AddWithValue("@num", song.PlaylistTrackIndex);
-                    command.Parameters.AddWithValue("@name", song.name);
-                    command.Parameters.AddWithValue("@playlist", song.playlist);
-                    command.Parameters.AddWithValue("@user", activeUser);
-
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
         private Button GetButtonAtMousePosition(Point position)
         {
             foreach (UIElement child in SongIntoPlaylist.Children)
@@ -701,15 +700,21 @@ namespace MediaPlayerApp
                 lStart.Content = "00:00:00";
             }
         }
-        //Перенос ползунка по точке   
         // конец песни
         private void MediaElement_MediaEnded(object sender, EventArgs e)
         {
             sMusic.Value = 0;
+
             if (currentTrackIndex == MaxTrackIndex || playlistTrackIndex == MaxPlaylistTrackIndex)
-                NextTrack();
+            {
+                if (!isRepeat)
+                    NextTrack();
+            }
             else
-                TrackWithDelay();
+            { 
+                if (!isRepeat)
+                    TrackWithDelay(); 
+            }
         }
         // условия для play с помощью стрелок
         private void bPause_PreviewKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
@@ -761,8 +766,8 @@ namespace MediaPlayerApp
                     PlayImage.Source = new BitmapImage(new Uri("/play.png", UriKind.Relative));
                 }
                 isDragging = true;
-                sMusic.CaptureMouse(); // захват мыши( исправил, тем самым баг)
-                Point position = e.GetPosition(sMusic); // тут есть баг, когда грузишь музыку, у нас в этот момент считывается мышка и ползунок перемещается
+                sMusic.CaptureMouse(); // захват мыши
+                Point position = e.GetPosition(sMusic); 
                 double d = 1.0d / sMusic.ActualWidth * position.X;
                 sMusic.Value = sMusic.Maximum * d;
             }
@@ -942,7 +947,6 @@ namespace MediaPlayerApp
         {
             DownStrip.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#C0C0C0"));
             tPlaylistName.Clear();
-            //DownStrip.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3D3D3D"));
             ClearButton.Visibility = Visibility.Collapsed;
         }
         //Меняем действие с кнопкой при изменении данных
@@ -1041,7 +1045,7 @@ namespace MediaPlayerApp
             AddPlaylistPanel.Visibility = Visibility.Collapsed; // Скрываем панель
             tPlaylistName1.Text = "Безымянный плейлист";
         }
-        void DbConnect(string path, string name, string user, string author)
+        private void DbConnect(string path, string name, string user, string author)
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
             using (var connection = new SqliteConnection(connectionString))
@@ -1101,7 +1105,7 @@ namespace MediaPlayerApp
         {
             VolumeSettings.SaveVolume(VolumeSlider.Value); // Сохранение громкости
         }
-        void DbInit()
+        private void DbInit()
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
             string sqlExpression = $"SELECT directory FROM directories JOIN `directories-users` ON directories.id = `directories-users`.directory_id JOIN users ON `directories-users`.user_id = users.id WHERE users.login =\"{activeUser}\"";
@@ -1124,7 +1128,7 @@ namespace MediaPlayerApp
             }
         }
         // добавление плейлиста в базу данных (названия не повторяются)
-        void AddNewPlaylist(string name)
+        private void AddNewPlaylist(string name)
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
             using (var connection = new SqliteConnection(connectionString))
@@ -1141,7 +1145,7 @@ namespace MediaPlayerApp
                 command.ExecuteNonQuery();
             }
         }
-        void ReadPlaylists()
+        private void ReadPlaylists()
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
 
@@ -1166,7 +1170,7 @@ namespace MediaPlayerApp
                 }
             }
         }
-        void AddSongIntoPlaylist(string songName, string playlistName, string directory, string playlistTrackIndex)
+        private void AddSongIntoPlaylist(string songName, string playlistName, string directory, string playlistTrackIndex)
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
             using (var connection = new SqliteConnection(connectionString))
@@ -1187,7 +1191,7 @@ namespace MediaPlayerApp
             songs.Clear();
             ReadSongsInPlaylist(playlistName);
         }
-        void ReadSongsInPlaylist(string playlistName)
+        private void ReadSongsInPlaylist(string playlistName)
         {
             string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
 
@@ -1210,6 +1214,28 @@ namespace MediaPlayerApp
                             songs.Add(new Songs(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
                         }
                     }
+                }
+            }
+        }
+        private void UpdatePlaylistDB()
+        {
+            string connectionString = $"Data Source={LoginWindow.path};Mode=ReadWrite";
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                foreach (var song in songs)
+                {
+                    SqliteCommand command = new SqliteCommand();
+                    command.Connection = connection;
+
+                    command.CommandText = "UPDATE `music-playlists` SET number_in_playlist=@num WHERE music_id = (SELECT music.id FROM music JOIN music_names ON music.name_id = music_names.id WHERE music_names.name=@name) AND playlist_id = (SELECT id FROM playlists WHERE name=@playlist AND user_id = (SELECT id FROM users WHERE login=@user))";
+                    command.Parameters.AddWithValue("@num", song.PlaylistTrackIndex);
+                    command.Parameters.AddWithValue("@name", song.name);
+                    command.Parameters.AddWithValue("@playlist", song.playlist);
+                    command.Parameters.AddWithValue("@user", activeUser);
+
+                    command.ExecuteNonQuery();
                 }
             }
         }
