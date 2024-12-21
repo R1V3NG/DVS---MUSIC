@@ -12,4 +12,5 @@ namespace DVS
         public string FilePath { get; set; }
         public string FileDirectory { get; set; }
     }
+
 }
